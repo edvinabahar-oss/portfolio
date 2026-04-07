@@ -18,8 +18,6 @@
       --mono: 'IBM Plex Mono', monospace;
     }
 
-    html { scroll-behavior: smooth; }
-
     body {
       background: var(--bg);
       color: var(--black);
@@ -31,36 +29,131 @@
 
     a { color: inherit; text-decoration: none; }
 
-    .page { display: none; }
-    .page.active { display: block; }
+    /* ── PAGE SYSTEM ── */
+    .page { display: none; min-height: 100vh; }
+    .page.active { display: flex; flex-direction: column; }
 
-    /* ── MAIN PAGE ── */
-    #main-page {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 100vh;
-    }
-
-    /* LEFT PANEL */
-    .left-panel {
-      padding: 3rem 3rem 3rem 3.5rem;
+    /* ── HAMBURGER MENU ── */
+    #menu-btn {
+      position: fixed;
+      top: 1.6rem;
+      left: 1.8rem;
+      z-index: 100;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      border-right: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      height: 100vh;
+      gap: 5px;
+      width: 28px;
     }
 
-    .name-block { margin-bottom: 2rem; opacity: 0; animation: fadeIn 0.7s ease 0.1s forwards; }
+    #menu-btn span {
+      display: block;
+      height: 1px;
+      background: var(--black);
+      transition: transform 0.3s ease, opacity 0.3s ease, width 0.3s ease;
+      transform-origin: left center;
+    }
 
-    
+    #menu-btn span:nth-child(1) { width: 28px; }
+    #menu-btn span:nth-child(2) { width: 20px; }
+    #menu-btn span:nth-child(3) { width: 24px; }
 
-    .name-text {}
+    body.menu-open #menu-btn span:nth-child(1) { transform: rotate(38deg) translateY(-1px); width: 28px; }
+    body.menu-open #menu-btn span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    body.menu-open #menu-btn span:nth-child(3) { transform: rotate(-38deg) translateY(1px); width: 28px; }
+
+    /* ── MENU OVERLAY ── */
+    #menu-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 90;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 3.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    body.menu-open #menu-overlay {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .menu-items {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .menu-item {
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0;
+      color: var(--black);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--sans);
+      text-align: left;
+      padding: 0.35rem 0;
+      position: relative;
+      width: fit-content;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 0.3s ease, transform 0.3s ease, color 0.2s;
+    }
+
+    body.menu-open .menu-item { opacity: 1; transform: translateY(0); }
+    body.menu-open .menu-item:nth-child(1) { transition-delay: 0.05s; }
+    body.menu-open .menu-item:nth-child(2) { transition-delay: 0.1s; }
+    body.menu-open .menu-item:nth-child(3) { transition-delay: 0.15s; }
+    body.menu-open .menu-item:nth-child(4) { transition-delay: 0.2s; }
+
+    .menu-item:hover { color: var(--muted); }
+
+    .menu-num {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      vertical-align: middle;
+      margin-right: 0.5rem;
+      font-weight: 400;
+    }
+
+    .menu-footer {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 3.5rem;
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── HOME PAGE ── */
+    #home-page {
+      padding: 5rem 3.5rem 3rem;
+      justify-content: space-between;
+      align-items: center;
+      text-align: center;
+    }
+
+    .home-top { display: flex; flex-direction: column; align-items: center; }
+
+    .name-block {
+      margin-bottom: 2.5rem;
+      opacity: 0;
+      animation: fadeIn 0.6s ease 0.15s forwards;
+    }
 
     .name-large {
-      font-size: clamp(1.6rem, 2.6vw, 2.5rem);
+      font-size: clamp(2rem, 4vw, 3.2rem);
       font-weight: 400;
       letter-spacing: -0.03em;
       line-height: 1.05;
@@ -72,12 +165,13 @@
       font-size: 11px;
       color: var(--muted);
       font-family: var(--mono);
-      margin-top: 0.5rem;
-      line-height: 1.5;
+      margin-top: 0.6rem;
+      line-height: 1.6;
     }
 
     .bio {
-      font-size: 13px;
+      max-width: 540px;
+      font-size: 13.5px;
       line-height: 1.78;
       color: var(--ink);
       opacity: 0;
@@ -85,7 +179,8 @@
     }
 
     .skills-block {
-      margin-top: 1.8rem;
+      margin-top: 2rem;
+      max-width: 540px;
       opacity: 0;
       animation: fadeIn 0.7s ease 0.5s forwards;
     }
@@ -103,6 +198,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 5px;
+      justify-content: center;
     }
 
     .pill {
@@ -114,16 +210,17 @@
       letter-spacing: 0.02em;
     }
 
-    .left-nav {
-      margin-top: 1.8rem;
+    .home-nav {
+      margin-top: 2.5rem;
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
+      align-items: center;
+      gap: 0.45rem;
       opacity: 0;
       animation: fadeIn 0.7s ease 0.65s forwards;
     }
 
-    .left-nav-btn {
+    .home-nav-btn {
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -139,7 +236,7 @@
       position: relative;
     }
 
-    .left-nav-btn::after {
+    .home-nav-btn::after {
       content: '';
       position: absolute;
       bottom: -1px;
@@ -150,12 +247,13 @@
       transition: width 0.2s ease;
     }
 
-    .left-nav-btn:hover::after { width: 100%; }
-    .left-nav-btn .arr { font-size: 11px; color: var(--muted); }
+    .home-nav-btn:hover::after { width: 100%; }
+    .home-nav-btn .arr { font-size: 11px; color: var(--muted); }
 
-    .left-bottom {
+    .home-bottom {
       opacity: 0;
       animation: fadeIn 0.7s ease 0.8s forwards;
+      text-align: center;
     }
 
     .coords {
@@ -167,21 +265,37 @@
 
     .city { font-size: 12px; color: var(--muted); }
 
-    /* RIGHT PANEL */
-    .right-panel {
-      padding: 3rem 3.5rem 3rem 3rem;
-      overflow-y: auto;
+    /* ── INNER PAGES ── */
+    .inner-page { padding: 5rem 3.5rem 3rem; }
+
+    .inner-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      margin-bottom: 3rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
     }
 
-    .right-section {
-      margin-bottom: 3.5rem;
-      opacity: 0;
-      animation: fadeIn 0.7s ease 0.4s forwards;
+    .inner-title {
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 400;
+      letter-spacing: -0.025em;
     }
 
-    .right-section:nth-child(2) { animation-delay: 0.55s; }
-    .right-section:nth-child(3) { animation-delay: 0.7s; }
-    .right-section:nth-child(4) { animation-delay: 0.85s; }
+    .back-btn {
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .back-btn:hover { color: var(--black); }
 
     .section-label {
       font-family: var(--mono);
@@ -191,11 +305,6 @@
       color: var(--muted);
       margin-bottom: 1.2rem;
     }
-
-    
-    
-
-    
 
     /* PROJECT ROWS */
     .project-row {
@@ -222,12 +331,7 @@
 
     .project-name { font-size: 14px; font-weight: 400; line-height: 1.4; }
 
-    .project-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 4px;
-      margin-top: 5px;
-    }
+    .project-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
 
     .tag {
       font-family: var(--mono);
@@ -244,107 +348,9 @@
       transition: transform 0.15s, color 0.15s;
     }
 
-    .project-row:hover .project-arrow {
-      transform: translate(2px, -2px);
-      color: var(--black);
-    }
+    .project-row:hover .project-arrow { transform: translate(2px, -2px); color: var(--black); }
 
-    /* EXPERIENCE ROWS */
-    .exp-row {
-      display: grid;
-      grid-template-columns: 3rem 1fr;
-      gap: 1rem;
-      padding: 1.2rem 0;
-      border-top: 1px solid var(--border);
-      cursor: pointer;
-      transition: opacity 0.15s;
-    }
-
-    .exp-row:last-child { border-bottom: 1px solid var(--border); }
-    .exp-row:hover { opacity: 0.55; }
-
-    .exp-num {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--muted);
-      padding-top: 2px;
-    }
-
-    .exp-name { font-size: 14px; font-weight: 400; }
-
-    .exp-sub {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 3px;
-      font-family: var(--mono);
-    }
-
-    /* NETWORK */
-    .network-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem 1.8rem;
-    }
-
-    .net-link {
-      font-size: 13px;
-      color: var(--ink);
-      position: relative;
-    }
-
-    .net-link::after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--black);
-      transition: width 0.2s ease;
-    }
-
-    .net-link:hover::after { width: 100%; }
-
-    .copyright {
-      font-family: var(--mono);
-      font-size: 10px;
-      color: var(--muted);
-      padding-top: 3rem;
-      padding-bottom: 1rem;
-    }
-
-    /* ── INNER PAGES ── */
-    .inner-page { min-height: 100vh; padding: 3rem 3.5rem; }
-
-    .inner-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
-      margin-bottom: 3rem;
-      padding-bottom: 1.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .inner-title {
-      font-size: clamp(1.8rem, 3vw, 2.5rem);
-      font-weight: 400;
-      letter-spacing: -0.025em;
-    }
-
-    .back-btn {
-      font-family: var(--mono);
-      font-size: 11px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-      background: none;
-      border: none;
-      cursor: pointer;
-      transition: color 0.2s;
-    }
-
-    .back-btn:hover { color: var(--black); }
-
+    /* EXPERIENCE CARDS */
     .exp-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -361,6 +367,8 @@
       justify-content: space-between;
       transition: background 0.2s, color 0.2s;
       cursor: default;
+      text-decoration: none;
+      color: var(--black);
     }
 
     .exp-card:hover { background: var(--black); color: var(--bg); }
@@ -378,136 +386,157 @@
 
     .exp-card:hover .exp-card-label { color: #aaa; }
 
+    /* ABOUT PAGE */
+    .about-content {
+      max-width: 600px;
+    }
+
+    .about-content p {
+      font-size: 14px;
+      line-height: 1.85;
+      color: var(--ink);
+      margin-bottom: 1.5rem;
+    }
+
+    /* CONTACT PAGE */
+    .contact-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .contact-row {
+      display: grid;
+      grid-template-columns: 8rem 1fr;
+      align-items: center;
+      padding: 1.2rem 0;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    .contact-row:last-child { border-bottom: 1px solid var(--border); }
+
+    .contact-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .contact-val {
+      color: var(--ink);
+      position: relative;
+      width: fit-content;
+    }
+
+    .contact-val::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      width: 0;
+      height: 1px;
+      background: var(--black);
+      transition: width 0.2s;
+    }
+
+    .contact-val:hover::after { width: 100%; }
+
+    .copyright {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: auto;
+      padding-top: 3rem;
+      padding-bottom: 1rem;
+    }
+
+    /* ── ANIMATIONS ── */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
       to   { opacity: 1; transform: translateY(0); }
     }
 
-    @media (max-width: 768px) {
-      #main-page { grid-template-columns: 1fr; }
-      .left-panel {
-        position: static;
-        height: auto;
-        border-right: none;
-        border-bottom: 1px solid var(--border);
-        padding: 2rem 1.5rem;
-      }
-      .right-panel { padding: 2rem 1.5rem; }
-      .inner-page  { padding: 2rem 1.5rem; }
-      
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      #home-page, .inner-page { padding: 4.5rem 1.5rem 2rem; }
+      #menu-btn { left: 1.2rem; top: 1.2rem; }
+      #menu-overlay { padding: 0 1.5rem; }
+      .menu-footer { left: 1.5rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- MAIN PAGE -->
-  <div id="main-page" class="page active">
+  <!-- HAMBURGER BUTTON -->
+  <button id="menu-btn" aria-label="Toggle menu" onclick="toggleMenu()">
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
 
-    <div class="left-panel">
-      <div>
-        <div class="name-block">
-          
-          <div class="name-text">
-            <div class="name-large">EDVINA BAHAR<span class="name-underscore">_</span></div>
-            <div class="tagline">UofT · Neuroscience &amp; Psychology<br>MBA @ USF · San Francisco</div>
-          </div>
-        </div>
+  <!-- MENU OVERLAY -->
+  <div id="menu-overlay">
+    <nav class="menu-items">
+      <button class="menu-item" onclick="navTo('home-page')">
+        <span class="menu-num">01</span>About
+      </button>
+      <button class="menu-item" onclick="navTo('experience-page')">
+        <span class="menu-num">02</span>Experience
+      </button>
+      <button class="menu-item" onclick="navTo('projects-page')">
+        <span class="menu-num">03</span>Projects
+      </button>
+      <button class="menu-item" onclick="navTo('contact-page')">
+        <span class="menu-num">04</span>Contact
+      </button>
+    </nav>
+    <div class="menu-footer">edvina.io</div>
+  </div>
 
-        <p class="bio">
-          From improving healthcare to preserving culture, I'm driven to understand how we can
-          design for evolving technological and human needs. Originally from Istanbul, Turkey.
-          My interests include making coffee, salsa dancing, and multilingualism. I speak English,
-          Turkish, and Spanish and chasing Portuguese next, so I can read Clarice Lispector in her
-          own language from Rio. I enjoy building things and someday I'd like to use what I am
-          currently learning about HCI to think more seriously about human cognition and improving it.
-        </p>
-
-        <div class="skills-block">
-          <div class="skills-label">What I work with</div>
-          <div class="skills-pills">
-            <span class="pill">Data Analysis</span>
-            <span class="pill">Neurotech</span>
-            <span class="pill">Computational Modelling</span>
-            <span class="pill">Prototype Design</span>
-            <span class="pill">Product</span>
-            <span class="pill">Strategy</span>
-          </div>
-        </div>
-
-        <nav class="left-nav">
-          <button class="left-nav-btn" onclick="showExperience()">
-            Experience <span class="arr">↗</span>
-          </button>
-          <button class="left-nav-btn" onclick="showProjects()">
-            Projects <span class="arr">↗</span>
-          </button>
-        </nav>
+  <!-- HOME PAGE -->
+  <div id="home-page" class="page active" style="display:flex;">
+    <div class="home-top">
+      <div class="name-block">
+        <div class="name-large">Edvina Bahar</div>
+        <div class="tagline">UofT · Neuroscience &amp; Psychology<br>MBA @ USF · San Francisco</div>
       </div>
 
-      <div class="left-bottom">
-        <div class="coords">37.7749° N · 122.4194° W</div>
-        <div class="city">San Francisco</div>
+      <p class="bio">
+        From improving healthcare to preserving culture, I'm driven to understand how we can
+        design for evolving technological and human needs. Originally from Istanbul, Turkey.
+        My interests include making coffee, salsa dancing, and multilingualism. I speak English,
+        Turkish, and Spanish and chasing Portuguese next, so I can read Clarice Lispector in her
+        own language from Rio. I enjoy building things and someday I'd like to use what I am
+        currently learning about HCI to think more seriously about human cognition and improving it.
+      </p>
+
+      <div class="skills-block">
+        <div class="skills-label">What I work with</div>
+        <div class="skills-pills">
+          <span class="pill">Data Analysis</span>
+          <span class="pill">Neurotech</span>
+          <span class="pill">Computational Modelling</span>
+          <span class="pill">Prototype Design</span>
+          <span class="pill">Product</span>
+          <span class="pill">Strategy</span>
+        </div>
       </div>
+
+      <nav class="home-nav">
+        <button class="home-nav-btn" onclick="showPage('experience-page')">
+          Experience <span class="arr">↗</span>
+        </button>
+        <button class="home-nav-btn" onclick="showPage('projects-page')">
+          Projects <span class="arr">↗</span>
+        </button>
+      </nav>
     </div>
 
-    <div class="right-panel">
-
-      <div class="right-section">
-        <div class="section-label">Projects</div>
-        <a href="https://trackly.app" target="_blank" rel="noopener" class="project-row">
-          <span class="project-num">01</span>
-          <div>
-            <div class="project-name">Trackly</div>
-            <div class="project-tags">
-              <span class="tag">Web App</span>
-              <span class="tag">Most Recent</span>
-            </div>
-          </div>
-          <span class="project-arrow">&#x2197;</span>
-        </a>
-      </div>
-
-      <div class="right-section">
-        <div class="section-label">Experience</div>
-        <div class="exp-row" onclick="showExperience()">
-          <span class="exp-num">01</span>
-          <div>
-            <div class="exp-name">Vision Biotechnology</div>
-            <div class="exp-sub">Biotech</div>
-          </div>
-        </div>
-        <div class="exp-row" onclick="showExperience()">
-          <span class="exp-num">02</span>
-          <div>
-            <div class="exp-name">The Hospital for Sick Kids</div>
-            <div class="exp-sub">Healthcare</div>
-          </div>
-        </div>
-        <div class="exp-row" onclick="showExperience()">
-          <span class="exp-num">03</span>
-          <div>
-            <div class="exp-name">Kim Lab</div>
-            <div class="exp-sub">Research</div>
-          </div>
-        </div>
-        <a href="https://thevarsity.ca/author/edvinabahar/" target="_blank" rel="noopener" class="exp-row" style="text-decoration:none;">
-          <span class="exp-num">04</span>
-          <div>
-            <div class="exp-name">The Varsity</div>
-            <div class="exp-sub">Media ↗</div>
-          </div>
-        </a>
-      </div>
-
-      <div class="right-section">
-        <div class="section-label">Get in touch</div>
-        <div class="network-links">
-          <a href="/cdn-cgi/l/email-protection#d8bdbcaeb1b6b998bdbcaeb1b6b9f6b1b7" class="net-link">Email</a>
-          <a href="https://linkedin.com" target="_blank" class="net-link">LinkedIn</a>
-        </div>
-      </div>
-
-      <div class="copyright">&#169; 2026 Edvina Bahar</div>
+    <div class="home-bottom">
+      <div class="coords">37.7749° N · 122.4194° W</div>
+      <div class="city">San Francisco</div>
     </div>
   </div>
 
@@ -515,7 +544,7 @@
   <div id="experience-page" class="page inner-page">
     <div class="inner-header">
       <h1 class="inner-title">Experience_</h1>
-      <button class="back-btn" onclick="goHome()">&#8592; Back</button>
+      <button class="back-btn" onclick="showPage('home-page')">&#8592; Back</button>
     </div>
     <div class="exp-cards">
       <div class="exp-card">
@@ -530,18 +559,19 @@
         <div class="exp-card-name">Kim Lab</div>
         <div class="exp-card-label">Research</div>
       </div>
-      <a href="https://thevarsity.ca/author/edvinabahar/" target="_blank" rel="noopener" class="exp-card" style="text-decoration:none;">
+      <a href="https://thevarsity.ca/author/edvinabahar/" target="_blank" rel="noopener" class="exp-card">
         <div class="exp-card-name">The Varsity</div>
         <div class="exp-card-label">Media ↗</div>
       </a>
     </div>
+    <div class="copyright">&#169; 2026 Edvina Bahar</div>
   </div>
 
   <!-- PROJECTS PAGE -->
   <div id="projects-page" class="page inner-page">
     <div class="inner-header">
       <h1 class="inner-title">Projects_</h1>
-      <button class="back-btn" onclick="goHome()">&#8592; Back</button>
+      <button class="back-btn" onclick="showPage('home-page')">&#8592; Back</button>
     </div>
     <a href="https://trackly.app" target="_blank" rel="noopener" class="project-row">
       <span class="project-num">01</span>
@@ -554,12 +584,95 @@
       </div>
       <span class="project-arrow">&#x2197;</span>
     </a>
+    <div class="copyright">&#169; 2026 Edvina Bahar</div>
   </div>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <!-- ABOUT PAGE (from menu) -->
+  <div id="about-page" class="page inner-page">
+    <div class="inner-header">
+      <h1 class="inner-title">About_</h1>
+      <button class="back-btn" onclick="showPage('home-page')">&#8592; Back</button>
+    </div>
+    <div class="about-content">
+      <p>
+        From improving healthcare to preserving culture, I'm driven to understand how we can
+        design for evolving technological and human needs. Originally from Istanbul, Turkey.
+      </p>
+      <p>
+        I graduated from the University of Toronto with an Honours BSc in Neuroscience and
+        Psychology. This led me to Taxidis Lab at SickKids Hospital, working on computational
+        modeling of memory — a segue into tech and product.
+      </p>
+      <p>
+        My interests include making coffee, salsa dancing, and multilingualism. I speak English,
+        Turkish, and Spanish and chasing Portuguese next, so I can read Clarice Lispector in her
+        own language from Rio. I enjoy building things and someday I'd like to use what I am
+        currently learning about HCI to think more seriously about human cognition and improving it.
+      </p>
+      <div class="skills-block" style="margin-top:1.5rem;">
+        <div class="skills-label">What I work with</div>
+        <div class="skills-pills">
+          <span class="pill">Data Analysis</span>
+          <span class="pill">Neurotech</span>
+          <span class="pill">Computational Modelling</span>
+          <span class="pill">Prototype Design</span>
+          <span class="pill">Product</span>
+          <span class="pill">Strategy</span>
+        </div>
+      </div>
+    </div>
+    <div class="copyright">&#169; 2026 Edvina Bahar</div>
+  </div>
+
+  <!-- CONTACT PAGE -->
+  <div id="contact-page" class="page inner-page">
+    <div class="inner-header">
+      <h1 class="inner-title">Contact_</h1>
+      <button class="back-btn" onclick="showPage('home-page')">&#8592; Back</button>
+    </div>
+    <div class="contact-list">
+      <div class="contact-row">
+        <span class="contact-label">Email</span>
+        <a href="mailto:edvina@edvina.io" class="contact-val">edvina@edvina.io</a>
+      </div>
+      <div class="contact-row">
+        <span class="contact-label">LinkedIn</span>
+        <a href="https://linkedin.com" target="_blank" rel="noopener" class="contact-val">linkedin.com/in/edvinabahar</a>
+      </div>
+      <div class="contact-row">
+        <span class="contact-label">Location</span>
+        <span class="contact-val" style="cursor:default;">San Francisco, CA</span>
+      </div>
+    </div>
+    <div class="copyright">&#169; 2026 Edvina Bahar</div>
+  </div>
+
+  <script>
     function showPage(id) {
-      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
+      document.querySelectorAll('.page').forEach(p => {
+        p.classList.remove('active');
+        p.style.display = 'none';
+      });
+      const target = document.getElementById(id);
+      target.style.display = 'flex';
+      target.classList.add('active');
       window.scrollTo(0, 0);
     }
-    function showExperience() { showPage('experience-page');
+
+    function toggleMenu() {
+      document.body.classList.toggle('menu-open');
+    }
+
+    function navTo(id) {
+      document.body.classList.remove('menu-open');
+      // small delay so menu closes before page switches
+      setTimeout(() => showPage(id), 200);
+    }
+
+    // init: hide all but home
+    document.querySelectorAll('.page').forEach(p => {
+      if (!p.classList.contains('active')) p.style.display = 'none';
+    });
+  </script>
+</body>
+</html>
