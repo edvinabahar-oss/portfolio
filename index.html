@@ -458,12 +458,195 @@
       to   { opacity: 1; transform: translateY(0); }
     }
 
+    #contact-sub {
+      display: none;
+      flex-direction: column;
+      gap: 0;
+      padding-left: 1.4rem;
+      margin-top: 0.1rem;
+      overflow: hidden;
+    }
+
+    #contact-sub.open { display: flex; }
+
+    .contact-sub-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--sans);
+      text-align: left;
+      text-decoration: none;
+      padding: 0.25rem 0;
+      width: fit-content;
+      position: relative;
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: color 0.2s, opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    #contact-sub.open .contact-sub-item { opacity: 1; transform: translateX(0); }
+    #contact-sub.open .contact-sub-item:nth-child(2) { transition-delay: 0.06s; }
+
+    .contact-sub-item:hover { color: var(--black); }
+
+    .contact-sub-num {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--border);
+    }
+    .contact-options {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .contact-option-btn {
+      display: grid;
+      grid-template-columns: 8rem 1fr auto;
+      align-items: center;
+      padding: 1.4rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: none;
+      background: none;
+      cursor: pointer;
+      font-family: var(--sans);
+      color: var(--black);
+      text-decoration: none;
+      transition: opacity 0.15s;
+      width: 100%;
+      text-align: left;
+    }
+
+    .contact-option-btn:last-child { border-bottom: 1px solid var(--border); }
+    .contact-option-btn:hover { opacity: 0.6; }
+
+    .contact-option-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .contact-option-sub { font-size: 13px; color: var(--ink); }
+
+    .contact-option-arr { font-size: 12px; color: var(--muted); }
+
+    /* EMAIL MODAL */
+    #email-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,10,9,0.72);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    #email-modal.open { display: flex; }
+
+    .modal-box {
+      background: #111110;
+      border: 1px solid #2a2a28;
+      padding: 2.2rem 2.5rem 2rem;
+      width: 100%;
+      max-width: 540px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.6rem;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #888;
+    }
+
+    .modal-close {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #666;
+      background: none;
+      border: none;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .modal-close:hover { color: #ccc; }
+
+    .modal-field { display: flex; flex-direction: column; gap: 0.5rem; }
+
+    .modal-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #555;
+    }
+
+    .modal-input, .modal-textarea {
+      background: none;
+      border: none;
+      border-bottom: 1px solid #2e2e2c;
+      color: #c8c5be;
+      font-family: var(--mono);
+      font-size: 13px;
+      padding: 0.5rem 0;
+      outline: none;
+      width: 100%;
+      transition: border-color 0.2s;
+    }
+
+    .modal-input::placeholder, .modal-textarea::placeholder { color: #444; }
+    .modal-input:focus, .modal-textarea:focus { border-bottom-color: #666; }
+
+    .modal-textarea {
+      resize: none;
+      height: 110px;
+      line-height: 1.7;
+    }
+
+    .modal-send {
+      background: var(--bg);
+      color: var(--black);
+      border: none;
+      padding: 1rem;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      width: 100%;
+    }
+
+    .modal-send:hover { opacity: 0.85; }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 600px) {
       #home-page, .inner-page { padding: 4.5rem 1.5rem 2rem; }
       #menu-btn { left: 1.2rem; top: 1.2rem; }
       #menu-overlay { padding: 0 1.5rem; }
       .menu-footer { left: 1.5rem; }
+      .modal-box { padding: 1.8rem 1.4rem; }
+      .contact-option-btn { grid-template-columns: 6rem 1fr auto; }
     }
   </style>
 </head>
@@ -488,9 +671,17 @@
       <button class="menu-item" onclick="navTo('projects-page')">
         <span class="menu-num">03</span>Projects
       </button>
-      <button class="menu-item" onclick="navTo('contact-page')">
+      <button class="menu-item" onclick="toggleContactSub()">
         <span class="menu-num">04</span>Contact
       </button>
+      <div id="contact-sub">
+        <button class="contact-sub-item" onclick="openEmailModal(); toggleMenu();">
+          <span class="contact-sub-num">—</span>Email
+        </button>
+        <a href="https://www.linkedin.com/in/edvina-bahar-8607741b8/" target="_blank" rel="noopener" class="contact-sub-item" onclick="toggleMenu()">
+          <span class="contact-sub-num">—</span>LinkedIn
+        </a>
+      </div>
     </nav>
     <div class="menu-footer">edvina.io</div>
   </div>
@@ -630,24 +821,45 @@
       <h1 class="inner-title">Contact_</h1>
       <button class="back-btn" onclick="showPage('home-page')">&#8592; Back</button>
     </div>
-    <div class="contact-list">
-      <div class="contact-row">
-        <span class="contact-label">Email</span>
-        <a href="mailto:edvina@edvina.io" class="contact-val">edvina@edvina.io</a>
-      </div>
-      <div class="contact-row">
-        <span class="contact-label">LinkedIn</span>
-        <a href="https://linkedin.com" target="_blank" rel="noopener" class="contact-val">linkedin.com/in/edvinabahar</a>
-      </div>
-      <div class="contact-row">
-        <span class="contact-label">Location</span>
-        <span class="contact-val" style="cursor:default;">San Francisco, CA</span>
-      </div>
+    <div class="contact-options">
+      <button class="contact-option-btn" onclick="openEmailModal()">
+        <span class="contact-option-label">Email</span>
+        <span class="contact-option-sub">edvinabahar@gmail.com</span>
+        <span class="contact-option-arr">↗</span>
+      </button>
+      <a href="https://www.linkedin.com/in/edvina-bahar-8607741b8/" target="_blank" rel="noopener" class="contact-option-btn">
+        <span class="contact-option-label">LinkedIn</span>
+        <span class="contact-option-sub">linkedin.com/in/edvina-bahar</span>
+        <span class="contact-option-arr">↗</span>
+      </a>
     </div>
     <div class="copyright">&#169; 2026 Edvina Bahar</div>
   </div>
 
-  <script>
+  <!-- EMAIL MODAL -->
+  <div id="email-modal" onclick="handleModalClick(event)">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span class="modal-title">Get in touch</span>
+        <button class="modal-close" onclick="closeEmailModal()">Close [ESC]</button>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Name</label>
+        <input type="text" id="m-name" class="modal-input" placeholder="Full name" />
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Email</label>
+        <input type="email" id="m-email" class="modal-input" placeholder="Your email" />
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Message</label>
+        <textarea id="m-message" class="modal-textarea" placeholder="What's on your mind?"></textarea>
+      </div>
+      <button class="modal-send" onclick="sendEmail()">Send</button>
+    </div>
+  </div>
+
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     function showPage(id) {
       document.querySelectorAll('.page').forEach(p => {
         p.classList.remove('active');
@@ -661,18 +873,43 @@
 
     function toggleMenu() {
       document.body.classList.toggle('menu-open');
+      if (!document.body.classList.contains('menu-open')) {
+        document.getElementById('contact-sub').classList.remove('open');
+      }
     }
 
-    function navTo(id) {
-      document.body.classList.remove('menu-open');
-      // small delay so menu closes before page switches
-      setTimeout(() => showPage(id), 200);
+    function toggleContactSub() {
+      document.getElementById('contact-sub').classList.toggle('open');
     }
 
-    // init: hide all but home
-    document.querySelectorAll('.page').forEach(p => {
-      if (!p.classList.contains('active')) p.style.display = 'none';
+    function openEmailModal() {
+      document.getElementById('email-modal').classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeEmailModal() {
+      document.getElementById('email-modal').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function handleModalClick(e) {
+      if (e.target === document.getElementById('email-modal')) closeEmailModal();
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeEmailModal();
     });
-  </script>
-</body>
-</html>
+
+    function sendEmail() {
+      const name    = document.getElementById('m-name').value.trim();
+      const email   = document.getElementById('m-email').value.trim();
+      const message = document.getElementById('m-message').value.trim();
+      if (!name || !email || !message) {
+        alert('Please fill in all fields.');
+        return;
+      }
+      const subject = encodeURIComponent('Message from ' + name);
+      const body    = encodeURIComponent('From: ' + name + '\nEmail: ' + email + '\n\n' + message);
+      window.location.href = 'mailto:edvinabahar@gmail.com?subject=' + subject + '&body=' + body;
+      closeEmailModal();
+    }
