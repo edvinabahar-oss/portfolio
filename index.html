@@ -29,16 +29,16 @@
 
     a { color: inherit; text-decoration: none; }
 
-    /* ── PAGE SYSTEM ── */
-    .page { display: none; min-height: 100vh; }
-    .page.active { display: flex; flex-direction: column; }
+    /* PAGE SYSTEM */
+    .page { display: none; min-height: 100vh; flex-direction: column; }
+    .page.active { display: flex; }
 
-    /* ── HAMBURGER MENU ── */
+    /* HAMBURGER BUTTON */
     #menu-btn {
       position: fixed;
       top: 1.6rem;
       left: 1.8rem;
-      z-index: 100;
+      z-index: 200;
       background: none;
       border: none;
       cursor: pointer;
@@ -65,11 +65,11 @@
     body.menu-open #menu-btn span:nth-child(2) { opacity: 0; transform: scaleX(0); }
     body.menu-open #menu-btn span:nth-child(3) { transform: rotate(-38deg) translateY(1px); width: 28px; }
 
-    /* ── MENU OVERLAY ── */
+    /* MENU OVERLAY */
     #menu-overlay {
       position: fixed;
       inset: 0;
-      z-index: 90;
+      z-index: 190;
       background: var(--bg);
       display: flex;
       flex-direction: column;
@@ -88,13 +88,12 @@
     .menu-items {
       display: flex;
       flex-direction: column;
-      gap: 0.2rem;
+      gap: 0.15rem;
     }
 
     .menu-item {
       font-size: 13px;
       font-weight: 400;
-      letter-spacing: 0;
       color: var(--black);
       background: none;
       border: none;
@@ -102,18 +101,19 @@
       font-family: var(--sans);
       text-align: left;
       padding: 0.35rem 0;
-      position: relative;
       width: fit-content;
+      position: relative;
       opacity: 0;
-      transform: translateY(16px);
+      transform: translateY(12px);
       transition: opacity 0.3s ease, transform 0.3s ease, color 0.2s;
     }
 
     body.menu-open .menu-item { opacity: 1; transform: translateY(0); }
     body.menu-open .menu-item:nth-child(1) { transition-delay: 0.05s; }
-    body.menu-open .menu-item:nth-child(2) { transition-delay: 0.1s; }
+    body.menu-open .menu-item:nth-child(2) { transition-delay: 0.10s; }
     body.menu-open .menu-item:nth-child(3) { transition-delay: 0.15s; }
-    body.menu-open .menu-item:nth-child(4) { transition-delay: 0.2s; }
+    body.menu-open .menu-item:nth-child(4) { transition-delay: 0.20s; }
+    body.menu-open .menu-item:nth-child(5) { transition-delay: 0.25s; }
 
     .menu-item:hover { color: var(--muted); }
 
@@ -121,9 +121,52 @@
       font-family: var(--mono);
       font-size: 10px;
       color: var(--muted);
-      vertical-align: middle;
       margin-right: 0.5rem;
-      font-weight: 400;
+    }
+
+    /* CONTACT SUB-ITEMS */
+    #contact-sub {
+      padding-left: 1.6rem;
+      margin-top: 0.15rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    #contact-sub.open { max-height: 80px; }
+
+    .contact-sub-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 12px;
+      color: var(--muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--sans);
+      text-decoration: none;
+      padding: 0.2rem 0;
+      width: fit-content;
+      transition: color 0.2s;
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: color 0.2s, opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    #contact-sub.open .contact-sub-item { opacity: 1; transform: translateX(0); }
+    #contact-sub.open .contact-sub-item:nth-child(1) { transition-delay: 0.05s; }
+    #contact-sub.open .contact-sub-item:nth-child(2) { transition-delay: 0.1s; }
+
+    .contact-sub-item:hover { color: var(--black); }
+
+    .contact-sub-dash {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--border);
     }
 
     .menu-footer {
@@ -136,7 +179,7 @@
       letter-spacing: 0.1em;
     }
 
-    /* ── HOME PAGE ── */
+    /* HOME PAGE */
     #home-page {
       padding: 5rem 3.5rem 3rem;
       justify-content: space-between;
@@ -157,9 +200,28 @@
       font-weight: 400;
       letter-spacing: -0.03em;
       line-height: 1.05;
+      cursor: default;
+      position: relative;
+      display: inline-block;
+      background: linear-gradient(90deg, var(--black) 0%, var(--black) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    .name-underscore { color: var(--muted); }
+    /* sparks */
+    .spark {
+      position: absolute;
+      pointer-events: none;
+      font-size: 12px;
+      animation: sparkFly 0.7s ease-out forwards;
+      z-index: 10;
+    }
+
+    @keyframes sparkFly {
+      0%   { opacity: 1; transform: translate(0, 0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--sx), var(--sy)) scale(0.3); }
+    }
 
     .tagline {
       font-size: 11px;
@@ -194,12 +256,7 @@
       margin-bottom: 0.7rem;
     }
 
-    .skills-pills {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      justify-content: center;
-    }
+    .skills-pills { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; }
 
     .pill {
       font-family: var(--mono);
@@ -207,7 +264,6 @@
       padding: 3px 8px;
       border: 1px solid var(--border);
       color: var(--ink);
-      letter-spacing: 0.02em;
     }
 
     .home-nav {
@@ -231,7 +287,6 @@
       border: none;
       padding: 0;
       font-family: var(--sans);
-      text-align: left;
       width: fit-content;
       position: relative;
     }
@@ -239,10 +294,8 @@
     .home-nav-btn::after {
       content: '';
       position: absolute;
-      bottom: -1px;
-      left: 0;
-      width: 0;
-      height: 1px;
+      bottom: -1px; left: 0;
+      width: 0; height: 1px;
       background: var(--black);
       transition: width 0.2s ease;
     }
@@ -251,21 +304,15 @@
     .home-nav-btn .arr { font-size: 11px; color: var(--muted); }
 
     .home-bottom {
+      text-align: center;
       opacity: 0;
       animation: fadeIn 0.7s ease 0.8s forwards;
-      text-align: center;
     }
 
-    .coords {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--muted);
-      margin-bottom: 0.25rem;
-    }
-
+    .coords { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 0.25rem; }
     .city { font-size: 12px; color: var(--muted); }
 
-    /* ── INNER PAGES ── */
+    /* INNER PAGES */
     .inner-page { padding: 5rem 3.5rem 3rem; }
 
     .inner-header {
@@ -314,23 +361,15 @@
       gap: 1rem;
       padding: 1.2rem 0;
       border-top: 1px solid var(--border);
-      cursor: pointer;
       color: var(--black);
       text-decoration: none;
     }
 
-    .project-row:last-child { border-bottom: 1px solid var(--border); }
+    .project-row:last-of-type { border-bottom: 1px solid var(--border); }
     .project-row:hover .project-name { text-decoration: underline; text-underline-offset: 3px; }
 
-    .project-num {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--muted);
-      padding-top: 2px;
-    }
-
+    .project-num { font-family: var(--mono); font-size: 11px; color: var(--muted); padding-top: 2px; }
     .project-name { font-size: 14px; font-weight: 400; line-height: 1.4; }
-
     .project-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 5px; }
 
     .tag {
@@ -366,9 +405,8 @@
       flex-direction: column;
       justify-content: space-between;
       transition: background 0.2s, color 0.2s;
-      cursor: default;
-      text-decoration: none;
       color: var(--black);
+      text-decoration: none;
     }
 
     .exp-card:hover { background: var(--black); color: var(--bg); }
@@ -386,62 +424,72 @@
 
     .exp-card:hover .exp-card-label { color: #aaa; }
 
-    /* ABOUT PAGE */
-    .about-content {
-      max-width: 600px;
+    /* PROJECTS GRID */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 1px;
+      background: var(--border);
+      flex: 1;
+      min-height: 60vh;
     }
 
-    .about-content p {
-      font-size: 14px;
-      line-height: 1.85;
-      color: var(--ink);
-      margin-bottom: 1.5rem;
-    }
-
-    /* CONTACT PAGE */
-    .contact-list {
+    .proj-card {
+      background: var(--bg);
+      padding: 2.5rem 2rem;
       display: flex;
       flex-direction: column;
-      gap: 0;
+      justify-content: space-between;
+      text-decoration: none;
+      color: var(--black);
+      transition: background 0.2s, color 0.2s;
+      min-height: 220px;
     }
 
-    .contact-row {
-      display: grid;
-      grid-template-columns: 8rem 1fr;
-      align-items: center;
-      padding: 1.2rem 0;
-      border-top: 1px solid var(--border);
-      font-size: 13px;
+    .proj-card:not(.proj-card-empty):hover {
+      background: var(--black);
+      color: var(--bg);
     }
 
-    .contact-row:last-child { border-bottom: 1px solid var(--border); }
+    .proj-card-empty { cursor: default; }
 
-    .contact-label {
+    .proj-card-top {}
+
+    .proj-card-name {
+      font-size: clamp(1.4rem, 2.5vw, 2rem);
+      font-weight: 400;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+    }
+
+    .proj-card-tags {
       font-family: var(--mono);
       font-size: 10px;
       letter-spacing: 0.12em;
       text-transform: uppercase;
       color: var(--muted);
+      margin-top: 0.6rem;
+      transition: color 0.2s;
     }
 
-    .contact-val {
-      color: var(--ink);
-      position: relative;
-      width: fit-content;
+    .proj-card:hover .proj-card-tags { color: #aaa; }
+
+    .proj-card-arr {
+      font-size: 1.1rem;
+      color: var(--muted);
+      align-self: flex-end;
+      transition: transform 0.15s, color 0.15s;
     }
 
-    .contact-val::after {
-      content: '';
-      position: absolute;
-      bottom: -1px;
-      left: 0;
-      width: 0;
-      height: 1px;
-      background: var(--black);
-      transition: width 0.2s;
+    .proj-card:not(.proj-card-empty):hover .proj-card-arr {
+      transform: translate(3px, -3px);
+      color: var(--bg);
     }
 
-    .contact-val:hover::after { width: 100%; }
+    /* ABOUT */
+    .about-content { max-width: 600px; }
+    .about-content p { font-size: 14px; line-height: 1.85; color: var(--ink); margin-bottom: 1.5rem; }
 
     .copyright {
       font-family: var(--mono);
@@ -452,99 +500,13 @@
       padding-bottom: 1rem;
     }
 
-    /* ── ANIMATIONS ── */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(8px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    #contact-sub {
-      display: none;
-      flex-direction: column;
-      gap: 0;
-      padding-left: 1.4rem;
-      margin-top: 0.1rem;
-      overflow: hidden;
-    }
-
-    #contact-sub.open { display: flex; }
-
-    .contact-sub-item {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 13px;
-      font-weight: 400;
-      color: var(--muted);
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-family: var(--sans);
-      text-align: left;
-      text-decoration: none;
-      padding: 0.25rem 0;
-      width: fit-content;
-      position: relative;
-      opacity: 0;
-      transform: translateX(-8px);
-      transition: color 0.2s, opacity 0.25s ease, transform 0.25s ease;
-    }
-
-    #contact-sub.open .contact-sub-item { opacity: 1; transform: translateX(0); }
-    #contact-sub.open .contact-sub-item:nth-child(2) { transition-delay: 0.06s; }
-
-    .contact-sub-item:hover { color: var(--black); }
-
-    .contact-sub-num {
-      font-family: var(--mono);
-      font-size: 10px;
-      color: var(--border);
-    }
-    .contact-options {
-      display: flex;
-      flex-direction: column;
-      gap: 0;
-    }
-
-    .contact-option-btn {
-      display: grid;
-      grid-template-columns: 8rem 1fr auto;
-      align-items: center;
-      padding: 1.4rem 0;
-      border-top: 1px solid var(--border);
-      border-bottom: none;
-      background: none;
-      cursor: pointer;
-      font-family: var(--sans);
-      color: var(--black);
-      text-decoration: none;
-      transition: opacity 0.15s;
-      width: 100%;
-      text-align: left;
-    }
-
-    .contact-option-btn:last-child { border-bottom: 1px solid var(--border); }
-    .contact-option-btn:hover { opacity: 0.6; }
-
-    .contact-option-label {
-      font-family: var(--mono);
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .contact-option-sub { font-size: 13px; color: var(--ink); }
-
-    .contact-option-arr { font-size: 12px; color: var(--muted); }
-
     /* EMAIL MODAL */
     #email-modal {
       display: none;
       position: fixed;
       inset: 0;
       background: rgba(10,10,9,0.72);
-      z-index: 200;
+      z-index: 300;
       align-items: center;
       justify-content: center;
       padding: 1.5rem;
@@ -563,11 +525,7 @@
       gap: 1.6rem;
     }
 
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+    .modal-header { display: flex; justify-content: space-between; align-items: center; }
 
     .modal-title {
       font-family: var(--mono);
@@ -616,12 +574,7 @@
 
     .modal-input::placeholder, .modal-textarea::placeholder { color: #444; }
     .modal-input:focus, .modal-textarea:focus { border-bottom-color: #666; }
-
-    .modal-textarea {
-      resize: none;
-      height: 110px;
-      line-height: 1.7;
-    }
+    .modal-textarea { resize: none; height: 110px; line-height: 1.7; }
 
     .modal-send {
       background: var(--bg);
@@ -633,27 +586,31 @@
       letter-spacing: 0.2em;
       text-transform: uppercase;
       cursor: pointer;
-      transition: opacity 0.2s;
       width: 100%;
+      transition: opacity 0.2s;
     }
 
     .modal-send:hover { opacity: 0.85; }
 
-    /* ── RESPONSIVE ── */
+    /* ANIMATIONS */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
     @media (max-width: 600px) {
       #home-page, .inner-page { padding: 4.5rem 1.5rem 2rem; }
       #menu-btn { left: 1.2rem; top: 1.2rem; }
       #menu-overlay { padding: 0 1.5rem; }
       .menu-footer { left: 1.5rem; }
       .modal-box { padding: 1.8rem 1.4rem; }
-      .contact-option-btn { grid-template-columns: 6rem 1fr auto; }
     }
   </style>
 </head>
 <body>
 
   <!-- HAMBURGER BUTTON -->
-  <button id="menu-btn" aria-label="Toggle menu" onclick="toggleMenu()">
+  <button id="menu-btn" aria-label="Toggle menu">
     <span></span>
     <span></span>
     <span></span>
@@ -662,47 +619,56 @@
   <!-- MENU OVERLAY -->
   <div id="menu-overlay">
     <nav class="menu-items">
-      <button class="menu-item" onclick="navTo('home-page')">
-        <span class="menu-num">01</span>About
-      </button>
-      <button class="menu-item" onclick="navTo('experience-page')">
-        <span class="menu-num">02</span>Experience
-      </button>
-      <button class="menu-item" onclick="navTo('projects-page')">
-        <span class="menu-num">03</span>Projects
-      </button>
-      <button class="menu-item" onclick="toggleContactSub()">
-        <span class="menu-num">04</span>Contact
-      </button>
+      <button class="menu-item" id="mi-home">Home</button>
+      <button class="menu-item" id="mi-about">About</button>
+      <button class="menu-item" id="mi-experience">Experience</button>
+      <button class="menu-item" id="mi-projects">Projects</button>
+      <button class="menu-item" id="mi-contact">Contact</button>
       <div id="contact-sub">
-        <button class="contact-sub-item" onclick="openEmailModal(); toggleMenu();">
-          <span class="contact-sub-num">—</span>Email
+        <button class="contact-sub-item" id="mi-email">
+          <span class="contact-sub-dash">—</span>Email
         </button>
-        <a href="https://www.linkedin.com/in/edvina-bahar-8607741b8/" target="_blank" rel="noopener" class="contact-sub-item" onclick="toggleMenu()">
-          <span class="contact-sub-num">—</span>LinkedIn
+        <a href="https://www.linkedin.com/in/edvina-bahar-8607741b8/" target="_blank" rel="noopener" class="contact-sub-item" id="mi-linkedin">
+          <span class="contact-sub-dash">—</span>LinkedIn
         </a>
       </div>
     </nav>
     <div class="menu-footer">edvina.io</div>
   </div>
 
+  <!-- EMAIL MODAL -->
+  <div id="email-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <span class="modal-title">Get in touch</span>
+        <button class="modal-close" id="modal-close-btn">Close [ESC]</button>
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Name</label>
+        <input type="text" id="m-name" class="modal-input" placeholder="Full name" />
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Email</label>
+        <input type="email" id="m-email" class="modal-input" placeholder="Your email" />
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Message</label>
+        <textarea id="m-message" class="modal-textarea" placeholder="What's on your mind?"></textarea>
+      </div>
+      <button class="modal-send" id="modal-send-btn">Send</button>
+    </div>
+  </div>
+
   <!-- HOME PAGE -->
-  <div id="home-page" class="page active" style="display:flex;">
+  <div id="home-page" class="page active">
     <div class="home-top">
       <div class="name-block">
         <div class="name-large">Edvina Bahar</div>
-        <div class="tagline">UofT · Neuroscience &amp; Psychology<br>MBA @ USF · San Francisco</div>
+        <div class="tagline">UofT &middot; Neuroscience &amp; Psychology<br>MBA @ USF &middot; San Francisco</div>
       </div>
-
       <p class="bio">
-        From improving healthcare to preserving culture, I'm driven to understand how we can
-        design for evolving technological and human needs. Originally from Istanbul, Turkey.
-        My interests include making coffee, salsa dancing, and multilingualism. I speak English,
-        Turkish, and Spanish and chasing Portuguese next, so I can read Clarice Lispector in her
-        own language from Rio. I enjoy building things and someday I'd like to use what I am
-        currently learning about HCI to think more seriously about human cognition and improving it.
+        Neuroscientist, researcher, and product manager. BSc from University of Toronto in Neuroscience, and an MBA in progress.
       </p>
-
       <div class="skills-block">
         <div class="skills-label">What I work with</div>
         <div class="skills-pills">
@@ -714,19 +680,17 @@
           <span class="pill">Strategy</span>
         </div>
       </div>
-
       <nav class="home-nav">
-        <button class="home-nav-btn" onclick="showPage('experience-page')">
-          Experience <span class="arr">↗</span>
+        <button class="home-nav-btn" id="home-exp-btn">
+          Experience <span class="arr">&#x2197;</span>
         </button>
-        <button class="home-nav-btn" onclick="showPage('projects-page')">
-          Projects <span class="arr">↗</span>
+        <button class="home-nav-btn" id="home-proj-btn">
+          Projects <span class="arr">&#x2197;</span>
         </button>
       </nav>
     </div>
-
     <div class="home-bottom">
-      <div class="coords">37.7749° N · 122.4194° W</div>
+      <div class="coords">37.7749&deg; N &middot; 122.4194&deg; W</div>
       <div class="city">San Francisco</div>
     </div>
   </div>
@@ -735,7 +699,7 @@
   <div id="experience-page" class="page inner-page">
     <div class="inner-header">
       <h1 class="inner-title">Experience_</h1>
-      <button class="back-btn" onclick="showPage('home-page')">&#8592; Back</button>
+      <button class="back-btn" id="exp-back">&#8592; Back</button>
     </div>
     <div class="exp-cards">
       <div class="exp-card">
@@ -752,7 +716,7 @@
       </div>
       <a href="https://thevarsity.ca/author/edvinabahar/" target="_blank" rel="noopener" class="exp-card">
         <div class="exp-card-name">The Varsity</div>
-        <div class="exp-card-label">Media ↗</div>
+        <div class="exp-card-label">Media &#x2197;</div>
       </a>
     </div>
     <div class="copyright">&#169; 2026 Edvina Bahar</div>
@@ -761,48 +725,36 @@
   <!-- PROJECTS PAGE -->
   <div id="projects-page" class="page inner-page">
     <div class="inner-header">
-      <h1 class="inner-title">Projects_</h1>
-      <button class="back-btn" onclick="showPage('home-page')">&#8592; Back</button>
+      <h1 class="inner-title">Projects</h1>
+      <button class="back-btn" id="proj-back">&#8592; Back</button>
     </div>
-    <a href="https://trackly.app" target="_blank" rel="noopener" class="project-row">
-      <span class="project-num">01</span>
-      <div>
-        <div class="project-name">Trackly</div>
-        <div class="project-tags">
-          <span class="tag">Web App</span>
-          <span class="tag">Most Recent</span>
+    <div class="projects-grid">
+      <a href="https://trackly.app" target="_blank" rel="noopener" class="proj-card">
+        <div class="proj-card-top">
+          <div class="proj-card-name">Trackly</div>
+          <div class="proj-card-tags">Web App &middot; Product &middot; Strategy &middot; 2026</div>
         </div>
-      </div>
-      <span class="project-arrow">&#x2197;</span>
-    </a>
+        <span class="proj-card-arr">&#x2197;</span>
+      </a>
+      <!-- placeholder slots to fill out the grid -->
+      <div class="proj-card proj-card-empty"></div>
+      <div class="proj-card proj-card-empty"></div>
+      <div class="proj-card proj-card-empty"></div>
+    </div>
     <div class="copyright">&#169; 2026 Edvina Bahar</div>
   </div>
 
-  <!-- ABOUT PAGE (from menu) -->
+  <!-- ABOUT PAGE -->
   <div id="about-page" class="page inner-page">
     <div class="inner-header">
       <h1 class="inner-title">About_</h1>
-      <button class="back-btn" onclick="showPage('home-page')">&#8592; Back</button>
+      <button class="back-btn" id="about-back">&#8592; Back</button>
     </div>
     <div class="about-content">
-      <p>
-        From improving healthcare to preserving culture, I'm driven to understand how we can
-        design for evolving technological and human needs. Originally from Istanbul, Turkey.
-      </p>
-      <p>
-        I graduated from the University of Toronto with an Honours BSc in Neuroscience and
-        Psychology. This led me to Taxidis Lab at SickKids Hospital, working on computational
-        modeling of memory — a segue into tech and product.
-      </p>
-      <p>
-        My interests include making coffee, salsa dancing, and multilingualism. I speak English,
-        Turkish, and Spanish and chasing Portuguese next, so I can read Clarice Lispector in her
-        own language from Rio. I enjoy building things and someday I'd like to use what I am
-        currently learning about HCI to think more seriously about human cognition and improving it.
-      </p>
-      <div class="skills-block" style="margin-top:1.5rem;">
+      <p>From improving healthcare to preserving culture, I'm driven to understand how we can design for evolving technological and human needs. Originally from Istanbul, Turkey. My interests include making coffee, salsa dancing, and multilingualism. I speak English, Turkish, and Spanish and chasing Portuguese next, so I can read Clarice Lispector in her own language from Rio. I enjoy building things and someday I'd like to use what I am currently learning about HCI to think more seriously about human cognition and improving it.</p>
+      <div class="skills-block" style="margin-top:1.5rem; opacity:1; animation:none;">
         <div class="skills-label">What I work with</div>
-        <div class="skills-pills">
+        <div class="skills-pills" style="justify-content:flex-start;">
           <span class="pill">Data Analysis</span>
           <span class="pill">Neurotech</span>
           <span class="pill">Computational Modelling</span>
@@ -815,73 +767,128 @@
     <div class="copyright">&#169; 2026 Edvina Bahar</div>
   </div>
 
-  <!-- CONTACT PAGE -->
-  <div id="contact-page" class="page inner-page">
-    <div class="inner-header">
-      <h1 class="inner-title">Contact_</h1>
-      <button class="back-btn" onclick="showPage('home-page')">&#8592; Back</button>
-    </div>
-    <div class="contact-options">
-      <button class="contact-option-btn" onclick="openEmailModal()">
-        <span class="contact-option-label">Email</span>
-        <span class="contact-option-sub">edvinabahar@gmail.com</span>
-        <span class="contact-option-arr">↗</span>
-      </button>
-      <a href="https://www.linkedin.com/in/edvina-bahar-8607741b8/" target="_blank" rel="noopener" class="contact-option-btn">
-        <span class="contact-option-label">LinkedIn</span>
-        <span class="contact-option-sub">linkedin.com/in/edvina-bahar</span>
-        <span class="contact-option-arr">↗</span>
-      </a>
-    </div>
-    <div class="copyright">&#169; 2026 Edvina Bahar</div>
-  </div>
+  <script>
+    // ── Name spotlight heat effect ──
+    var nameEl = document.querySelector('.name-large');
+    var sparkInterval = null;
 
-  <!-- EMAIL MODAL -->
-  <div id="email-modal" onclick="handleModalClick(event)">
-    <div class="modal-box">
-      <div class="modal-header">
-        <span class="modal-title">Get in touch</span>
-        <button class="modal-close" onclick="closeEmailModal()">Close [ESC]</button>
-      </div>
-      <div class="modal-field">
-        <label class="modal-label">Name</label>
-        <input type="text" id="m-name" class="modal-input" placeholder="Full name" />
-      </div>
-      <div class="modal-field">
-        <label class="modal-label">Email</label>
-        <input type="email" id="m-email" class="modal-input" placeholder="Your email" />
-      </div>
-      <div class="modal-field">
-        <label class="modal-label">Message</label>
-        <textarea id="m-message" class="modal-textarea" placeholder="What's on your mind?"></textarea>
-      </div>
-      <button class="modal-send" onclick="sendEmail()">Send</button>
-    </div>
-  </div>
+    nameEl.addEventListener('mousemove', function(e) {
+      var rect = nameEl.getBoundingClientRect();
+      var x = e.clientX - rect.left;
+      var y = e.clientY - rect.top;
+      var pct = (x / rect.width) * 100;
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+      // radial heat spotlight centered on cursor, fading to black either side
+      var spread = 12; // % width of the hot zone
+      var left  = Math.max(0, pct - spread);
+      var right = Math.min(100, pct + spread);
+
+      nameEl.style.backgroundImage =
+        'linear-gradient(90deg,' +
+        ' #0F0F0E ' + left + '%,' +
+        ' #c0392b ' + (pct - spread * 0.5) + '%,' +
+        ' #e74c3c ' + (pct - spread * 0.15) + '%,' +
+        ' #f39c12 ' + pct + '%,' +
+        ' #f1c40f ' + (pct + spread * 0.15) + '%,' +
+        ' #e67e22 ' + (pct + spread * 0.5) + '%,' +
+        ' #0F0F0E ' + right + '%' +
+        ')';
+    });
+
+    nameEl.addEventListener('mouseleave', function() {
+      clearInterval(sparkInterval);
+      sparkInterval = null;
+      nameEl.style.backgroundImage = 'linear-gradient(90deg, #0F0F0E 0%, #0F0F0E 100%)';
+    });
+
+    nameEl.addEventListener('mouseenter', function() {
+      sparkInterval = setInterval(spawnSpark, 90);
+    });
+
+    function spawnSpark() {
+      if (!nameEl.matches(':hover')) { clearInterval(sparkInterval); return; }
+      var spark = document.createElement('span');
+      spark.className = 'spark';
+      var chars = ['✦','✧','•','·','★','*'];
+      spark.textContent = chars[Math.floor(Math.random() * chars.length)];
+      var colors = ['#e74c3c','#e67e22','#f39c12','#f1c40f','#ff6b35'];
+      spark.style.color = colors[Math.floor(Math.random() * colors.length)];
+      var rect = nameEl.getBoundingClientRect();
+      // spawn sparks near the mouse, not randomly across full name
+      var mx = (parseFloat(nameEl.style.backgroundImage.match(/(\d+\.?\d*)%,\s*#f39c12/)?.[1] || 50) / 100) * rect.width;
+      spark.style.left = (mx - 10 + Math.random() * 20) + 'px';
+      spark.style.top  = (Math.random() * rect.height) + 'px';
+      var angle = (Math.random() * 360) * (Math.PI / 180);
+      var dist  = 18 + Math.random() * 30;
+      spark.style.setProperty('--sx', Math.cos(angle) * dist + 'px');
+      spark.style.setProperty('--sy', Math.sin(angle) * dist + 'px');
+      nameEl.appendChild(spark);
+      setTimeout(function() { if (spark.parentNode) spark.remove(); }, 700);
+    }
+
+    // ── Page switching ──
     function showPage(id) {
-      document.querySelectorAll('.page').forEach(p => {
+      document.querySelectorAll('.page').forEach(function(p) {
         p.classList.remove('active');
-        p.style.display = 'none';
       });
-      const target = document.getElementById(id);
-      target.style.display = 'flex';
-      target.classList.add('active');
+      document.getElementById(id).classList.add('active');
       window.scrollTo(0, 0);
     }
 
-    function toggleMenu() {
-      document.body.classList.toggle('menu-open');
-      if (!document.body.classList.contains('menu-open')) {
-        document.getElementById('contact-sub').classList.remove('open');
-      }
+    // ── Menu ──
+    var menuOpen = false;
+    var contactSubOpen = false;
+
+    function openMenu() {
+      menuOpen = true;
+      document.body.classList.add('menu-open');
     }
 
-    function toggleContactSub() {
-      document.getElementById('contact-sub').classList.toggle('open');
+    function closeMenu() {
+      menuOpen = false;
+      contactSubOpen = false;
+      document.body.classList.remove('menu-open');
+      document.getElementById('contact-sub').classList.remove('open');
     }
 
+    document.getElementById('menu-btn').addEventListener('click', function() {
+      if (menuOpen) { closeMenu(); } else { openMenu(); }
+    });
+
+    function navTo(id) {
+      closeMenu();
+      setTimeout(function() { showPage(id); }, 220);
+    }
+
+    document.getElementById('mi-home').addEventListener('click', function() { navTo('home-page'); });
+    document.getElementById('mi-about').addEventListener('click', function() { navTo('about-page'); });
+    document.getElementById('mi-experience').addEventListener('click', function() { navTo('experience-page'); });
+    document.getElementById('mi-projects').addEventListener('click', function() { navTo('projects-page'); });
+
+    document.getElementById('mi-contact').addEventListener('click', function() {
+      contactSubOpen = !contactSubOpen;
+      document.getElementById('contact-sub').classList.toggle('open', contactSubOpen);
+    });
+
+    document.getElementById('mi-email').addEventListener('click', function() {
+      closeMenu();
+      setTimeout(openEmailModal, 220);
+    });
+
+    document.getElementById('mi-linkedin').addEventListener('click', function() {
+      closeMenu();
+    });
+
+    // ── Home page buttons ──
+    document.getElementById('home-exp-btn').addEventListener('click', function() { showPage('experience-page'); });
+    document.getElementById('home-proj-btn').addEventListener('click', function() { showPage('projects-page'); });
+
+    // ── Back buttons ──
+    document.getElementById('exp-back').addEventListener('click', function() { showPage('home-page'); });
+    document.getElementById('proj-back').addEventListener('click', function() { showPage('home-page'); });
+    document.getElementById('about-back').addEventListener('click', function() { showPage('home-page'); });
+
+    // ── Email modal ──
     function openEmailModal() {
       document.getElementById('email-modal').classList.add('open');
       document.body.style.overflow = 'hidden';
@@ -892,24 +899,26 @@
       document.body.style.overflow = '';
     }
 
-    function handleModalClick(e) {
-      if (e.target === document.getElementById('email-modal')) closeEmailModal();
-    }
+    document.getElementById('modal-close-btn').addEventListener('click', closeEmailModal);
 
-    document.addEventListener('keydown', e => {
+    document.getElementById('email-modal').addEventListener('click', function(e) {
+      if (e.target === this) closeEmailModal();
+    });
+
+    document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') closeEmailModal();
     });
 
-    function sendEmail() {
-      const name    = document.getElementById('m-name').value.trim();
-      const email   = document.getElementById('m-email').value.trim();
-      const message = document.getElementById('m-message').value.trim();
-      if (!name || !email || !message) {
-        alert('Please fill in all fields.');
-        return;
-      }
-      const subject = encodeURIComponent('Message from ' + name);
-      const body    = encodeURIComponent('From: ' + name + '\nEmail: ' + email + '\n\n' + message);
+    document.getElementById('modal-send-btn').addEventListener('click', function() {
+      var name    = document.getElementById('m-name').value.trim();
+      var email   = document.getElementById('m-email').value.trim();
+      var message = document.getElementById('m-message').value.trim();
+      if (!name || !email || !message) { alert('Please fill in all fields.'); return; }
+      var subject = encodeURIComponent('Message from ' + name);
+      var body    = encodeURIComponent('From: ' + name + '\nEmail: ' + email + '\n\n' + message);
       window.location.href = 'mailto:edvinabahar@gmail.com?subject=' + subject + '&body=' + body;
       closeEmailModal();
-    }
+    });
+  </script>
+</body>
+</html>
