@@ -287,16 +287,29 @@
     .home-right {
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      justify-content: flex-start;
       padding: 5rem 3.5rem 3rem;
       opacity: 0;
       animation: fadeIn 0.7s ease 0.5s forwards;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #sparkle-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
     }
 
     .home-nav {
       display: flex;
       flex-direction: column;
       gap: 0.2rem;
+      position: relative;
+      z-index: 2;
     }
 
     .home-nav-btn {
@@ -977,6 +990,7 @@
         </div>
       </div>
       <div class="home-right">
+        <canvas id="sparkle-canvas"></canvas>
         <nav class="home-nav">
           <button class="home-nav-btn" id="home-exp-btn">
             Experience <span class="arr">&#x2197;</span>
@@ -1439,7 +1453,105 @@
     <div class="copyright">&#169; 2026 Edvina Bahar</div>
   </div>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <script data-cfasync="false">
+  document.addEventListener('DOMContentLoaded', function() {
+    // ── Sparkle canvas ──
+    (function() {
+      var canvas = document.getElementById('sparkle-canvas');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var particles = [];
+      var mouseX = -999, mouseY = -999;
+      var SHAPES = ['✦','✧','★','*','·','✺'];
+      var COLORS = ['#c8c4bc','#aaa99f','#d8d5ce','#888882','#1A1A18'];
+
+      function resize() {
+        var w = canvas.parentElement.offsetWidth;
+        var h = canvas.parentElement.offsetHeight;
+        if (w > 0 && h > 0) {
+          canvas.width  = w;
+          canvas.height = h;
+        }
+      }
+
+      // defer resize until layout is painted
+      requestAnimationFrame(function() {
+        resize();
+        for (var i = 0; i < 120; i++) spawn();
+        draw();
+      });
+
+      window.addEventListener('resize', resize);
+
+      function spawn() {
+        var w = canvas.width  || canvas.parentElement.offsetWidth  || 600;
+        var h = canvas.height || canvas.parentElement.offsetHeight || 500;
+        particles.push({
+          x: Math.random() * w,
+          y: Math.random() * h * 0.85,
+          vx: (Math.random() - 0.5) * 0.18,
+          vy: (Math.random() - 0.5) * 0.12,
+          char: SHAPES[Math.floor(Math.random() * SHAPES.length)],
+          color: COLORS[Math.floor(Math.random() * COLORS.length)],
+          size: 12 + Math.random() * 14,
+          alpha: 0,
+          targetAlpha: 0.35 + Math.random() * 0.45,
+          life: Math.floor(Math.random() * 120),
+          maxLife: 260 + Math.random() * 200
+        });
+      }
+
+      canvas.parentElement.addEventListener('mousemove', function(e) {
+        var rect = canvas.getBoundingClientRect();
+        mouseX = e.clientX - rect.left;
+        mouseY = e.clientY - rect.top;
+      });
+
+      canvas.parentElement.addEventListener('mouseleave', function() {
+        mouseX = -999; mouseY = -999;
+      });
+
+      function draw() {
+        if (!document.getElementById('home-page').classList.contains('active')) {
+          requestAnimationFrame(draw); return;
+        }
+        resize();
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        for (var i = particles.length - 1; i >= 0; i--) {
+          var p = particles[i];
+          p.life++;
+          if (p.life < 30) p.alpha += (p.targetAlpha - p.alpha) * 0.08;
+          if (p.life > p.maxLife - 40) p.alpha *= 0.93;
+
+          var dx = p.x - mouseX, dy = p.y - mouseY;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 80 && dist > 0) {
+            var force = (80 - dist) / 80;
+            p.vx += (dx / dist) * force * 0.4;
+            p.vy += (dy / dist) * force * 0.4;
+            p.alpha = Math.min(p.alpha * 1.04, 0.7);
+          }
+
+          p.vx *= 0.97; p.vy *= 0.97;
+          p.x += p.vx;  p.y += p.vy;
+
+          ctx.save();
+          ctx.globalAlpha = Math.max(0, p.alpha);
+          ctx.font = p.size + 'px serif';
+          ctx.fillStyle = p.color;
+          ctx.fillText(p.char, p.x, p.y);
+          ctx.restore();
+
+          if (p.life >= p.maxLife || p.alpha < 0.005) {
+            particles.splice(i, 1);
+            spawn();
+          }
+        }
+        requestAnimationFrame(draw);
+      }
+    })();
+
     // ── Name spotlight heat effect ──
     var nameEl = document.querySelector('.name-large');
     var sparkInterval = null;
@@ -1608,4 +1720,12 @@
       var message = document.getElementById('m-message').value.trim();
       if (!name || !email || !message) { alert('Please fill in all fields.'); return; }
       var subject = encodeURIComponent('Message from ' + name);
-      var body    = encod
+      var body    = encodeURIComponent('From: ' + name + '\nEmail: ' + email + '\n\n' + message);
+      window.location.href = 'mailto:edvinabahar@gmail.com?subject=' + subject + '&body=' + body;
+      closeEmailModal();
+    });
+
+  }); // end DOMContentLoaded
+  </script>
+</body>
+</html>
