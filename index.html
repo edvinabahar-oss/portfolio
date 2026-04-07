@@ -214,17 +214,17 @@
     }
 
     .name-large {
-      font-size: clamp(1.6rem, 2.4vw, 2.4rem);
+      font-size: clamp(2.4rem, 4vw, 4rem);
       font-weight: 400;
       letter-spacing: -0.03em;
       line-height: 1.05;
       cursor: default;
       position: relative;
       display: inline-block;
-      background: linear-gradient(90deg, var(--black) 0%, var(--black) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      background-image: linear-gradient(90deg, #0F0F0E 0%, #0F0F0E 100%);
     }
 
     /* sparks */
@@ -874,7 +874,6 @@
     }
 
     .modal-send:hover { opacity: 0.85; }
-
     /* ANIMATIONS */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
@@ -1002,7 +1001,7 @@
     <div class="project-detail">
 
       <div class="resume-contact">
-        <span>edvinabahar@gmail.com</span>
+        <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="096c6d7f6067686b6861687b496e64686065276a6664">[email&#160;protected]</a></span>
         <span>&middot;</span>
         <span>(415) 272-3177</span>
         <span>&middot;</span>
@@ -1440,7 +1439,7 @@
     <div class="copyright">&#169; 2026 Edvina Bahar</div>
   </div>
 
-  <script>
+  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
     // ── Name spotlight heat effect ──
     var nameEl = document.querySelector('.name-large');
     var sparkInterval = null;
@@ -1609,10 +1608,4 @@
       var message = document.getElementById('m-message').value.trim();
       if (!name || !email || !message) { alert('Please fill in all fields.'); return; }
       var subject = encodeURIComponent('Message from ' + name);
-      var body    = encodeURIComponent('From: ' + name + '\nEmail: ' + email + '\n\n' + message);
-      window.location.href = 'mailto:edvinabahar@gmail.com?subject=' + subject + '&body=' + body;
-      closeEmailModal();
-    });
-  </script>
-</body>
-</html>
+      var body    = encod
