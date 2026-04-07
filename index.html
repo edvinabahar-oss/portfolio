@@ -181,26 +181,28 @@
 
     /* HOME PAGE */
     #home-page {
-      padding: 4rem 3.5rem 3rem;
-      justify-content: space-between;
+      padding: 0;
+      justify-content: stretch;
       align-items: stretch;
       text-align: left;
-      flex-direction: column;
+      flex-direction: row;
+      min-height: 100vh;
     }
 
     .home-body {
       display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
+      grid-template-columns: 340px 1fr;
       flex: 1;
-      align-items: start;
-      padding-top: 1rem;
+      align-items: stretch;
+      min-height: 100vh;
     }
 
     .home-left {
       display: flex;
       flex-direction: column;
-      gap: 0;
+      justify-content: space-between;
+      padding: 5rem 2.5rem 3rem;
+      border-right: 1px solid var(--border);
     }
 
     .home-top { display: flex; flex-direction: column; align-items: flex-start; }
@@ -212,7 +214,7 @@
     }
 
     .name-large {
-      font-size: clamp(2rem, 3.5vw, 3.2rem);
+      font-size: clamp(1.6rem, 2.4vw, 2.4rem);
       font-weight: 400;
       letter-spacing: -0.03em;
       line-height: 1.05;
@@ -248,7 +250,6 @@
     }
 
     .bio {
-      max-width: 360px;
       font-size: 13px;
       line-height: 1.78;
       color: var(--ink);
@@ -259,7 +260,6 @@
 
     .skills-block {
       margin-top: 1.8rem;
-      max-width: 360px;
       opacity: 0;
       animation: fadeIn 0.7s ease 0.5s forwards;
     }
@@ -288,30 +288,29 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 1rem;
+      padding: 5rem 3.5rem 3rem;
       opacity: 0;
       animation: fadeIn 0.7s ease 0.5s forwards;
-      padding-top: 0.5rem;
     }
 
     .home-nav {
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
+      gap: 0.2rem;
     }
 
     .home-nav-btn {
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      font-size: clamp(2rem, 4vw, 3.8rem);
+      font-size: clamp(2.2rem, 4vw, 4rem);
       font-weight: 300;
       letter-spacing: -0.03em;
       color: var(--black);
       cursor: pointer;
       background: none;
       border: none;
-      padding: 0;
+      padding: 0.3rem 0;
       font-family: var(--sans);
       width: fit-content;
       position: relative;
@@ -320,13 +319,12 @@
     }
 
     .home-nav-btn:hover { color: var(--muted); }
-    .home-nav-btn .arr { font-size: 0.5em; color: var(--muted); vertical-align: super; }
+    .home-nav-btn .arr { font-size: 0.45em; color: var(--muted); vertical-align: super; }
 
     .home-bottom {
       text-align: left;
       opacity: 0;
       animation: fadeIn 0.7s ease 0.8s forwards;
-      padding-top: 2rem;
     }
 
     .coords { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-bottom: 0.25rem; }
@@ -540,10 +538,13 @@
     .inner-title-link {
       text-decoration: none;
       color: var(--black);
+      display: inline;
+      width: fit-content;
     }
 
     .inner-title-link h1 {
       transition: color 0.2s;
+      display: inline;
     }
 
     .inner-title-link:hover h1 { color: var(--muted); }
@@ -568,6 +569,87 @@
       transform: translateX(0) scale(1);
     }
 
+
+    /* RÉSUMÉ PAGE */
+    .resume-contact {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem 0.8rem;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .resume-link { color: var(--ink); text-decoration: none; position: relative; }
+    .resume-link:hover { color: var(--black); }
+
+    .resume-section { margin-bottom: 2.5rem; }
+
+    .resume-section-label {
+      font-family: var(--mono);
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 1.2rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .resume-entry { margin-bottom: 1.4rem; }
+
+    .resume-entry-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .resume-org { font-size: 14px; font-weight: 500; color: var(--black); }
+    .resume-loc { font-family: var(--mono); font-size: 10px; color: var(--muted); }
+
+    .resume-entry-sub {
+      font-size: 12.5px;
+      color: var(--ink);
+      margin-top: 0.2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .resume-entry-note {
+      font-size: 12.5px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 0.3rem;
+    }
+
+    .resume-bullets {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .resume-bullets li {
+      font-size: 12.5px;
+      color: var(--ink);
+      line-height: 1.65;
+      padding-left: 1rem;
+      position: relative;
+    }
+
+    .resume-bullets li::before {
+      content: '—';
+      position: absolute;
+      left: 0;
+      color: var(--border);
+      font-size: 11px;
+    }
 
     /* SICKKIDS LOGO */
     .sickkids-logo-wrap {
@@ -800,9 +882,12 @@
     }
 
     @media (max-width: 700px) {
-      #home-page, .inner-page { padding: 4.5rem 1.5rem 2rem; }
-      .home-body { grid-template-columns: 1fr; gap: 2.5rem; }
+      #home-page { flex-direction: column; }
+      .home-body { grid-template-columns: 1fr; min-height: auto; }
+      .home-left { border-right: none; border-bottom: 1px solid var(--border); padding: 4.5rem 1.5rem 2rem; }
+      .home-right { padding: 2rem 1.5rem 3rem; }
       .home-nav-btn { font-size: clamp(1.8rem, 8vw, 2.8rem); }
+      .inner-page { padding: 4.5rem 1.5rem 2rem; }
       #menu-btn { left: 1.2rem; top: 1.2rem; }
       #menu-overlay { padding: 0 1.5rem; }
       .menu-footer { left: 1.5rem; }
@@ -887,6 +972,10 @@
             </div>
           </div>
         </div>
+        <div class="home-bottom">
+          <div class="coords">37.7749&deg; N &middot; 122.4194&deg; W</div>
+          <div class="city">San Francisco</div>
+        </div>
       </div>
       <div class="home-right">
         <nav class="home-nav">
@@ -896,13 +985,124 @@
           <button class="home-nav-btn" id="home-proj-btn">
             Projects <span class="arr">&#x2197;</span>
           </button>
+          <a href="#" class="home-nav-btn" id="home-resume-btn">
+            R&eacute;sum&eacute; <span class="arr">&#x2197;</span>
+          </a>
         </nav>
       </div>
     </div>
-    <div class="home-bottom">
-      <div class="coords">37.7749&deg; N &middot; 122.4194&deg; W</div>
-      <div class="city">San Francisco</div>
+  </div>
+
+  <!-- RÉSUMÉ PAGE -->
+  <div id="resume-page" class="page inner-page">
+    <div class="inner-header">
+      <button class="back-btn" id="resume-back">&#8592; Back</button>
+      <h1 class="inner-title">R&eacute;sum&eacute;</h1>
     </div>
+    <div class="project-detail">
+
+      <div class="resume-contact">
+        <span>edvinabahar@gmail.com</span>
+        <span>&middot;</span>
+        <span>(415) 272-3177</span>
+        <span>&middot;</span>
+        <a href="https://www.linkedin.com/in/edvina-bahar-8607741b8/" target="_blank" rel="noopener" class="resume-link">LinkedIn &#x2197;</a>
+        <span>&middot;</span>
+        <span>San Francisco, CA</span>
+      </div>
+
+      <div class="resume-section">
+        <div class="resume-section-label">Education</div>
+        <div class="resume-entry">
+          <div class="resume-entry-header">
+            <span class="resume-org">University of San Francisco</span>
+            <span class="resume-loc">San Francisco, CA</span>
+          </div>
+          <div class="resume-entry-sub">MBA — Data Science, Strategy &amp; Analytics &nbsp;&middot;&nbsp; <em>May 2027</em></div>
+          <p class="resume-entry-note">Product Club VP of Operations; Graduate Student Senator for School of Management; Merit Scholarship Award Recipient</p>
+        </div>
+        <div class="resume-entry">
+          <div class="resume-entry-header">
+            <span class="resume-org">University of Toronto</span>
+            <span class="resume-loc">Toronto, ON</span>
+          </div>
+          <div class="resume-entry-sub">BSc — Neuroscience and Psychology, minor in Statistics &nbsp;&middot;&nbsp; <em>June 2024</em></div>
+          <p class="resume-entry-note">Research Assistant – Vision &amp; Memory Encoding for Neurodegenerative Diseases; MATLAB; Staff Writer at The Varsity</p>
+        </div>
+      </div>
+
+      <div class="resume-section">
+        <div class="resume-section-label">Experience</div>
+        <div class="resume-entry">
+          <div class="resume-entry-header">
+            <span class="resume-org">Vision Biotechnology</span>
+            <span class="resume-loc">Istanbul, Turkey</span>
+          </div>
+          <div class="resume-entry-sub">Sales &amp; Marketing Specialist — U.S. Market Expansion, GTM Strategy (IVD) &nbsp;&middot;&nbsp; <em>Jan–Apr 2025</em></div>
+          <ul class="resume-bullets">
+            <li>Cultivated client relationships and generated qualified leads within the $35B US IVD market.</li>
+            <li>Generated 11 new leads, driving the company's first client acquisitions in the US.</li>
+            <li>Conducted competitive market analysis, target research, and customer journey optimization.</li>
+            <li>Collaborated cross-functionally with marketing, sales, and bioengineering teams on IVD kit development.</li>
+          </ul>
+        </div>
+        <div class="resume-entry">
+          <div class="resume-entry-header">
+            <span class="resume-org">The Hospital for Sick Kids</span>
+            <span class="resume-loc">Toronto, ON</span>
+          </div>
+          <div class="resume-entry-sub">Research Assistant — Spatial Navigation, Data Analysis &amp; Statistics &nbsp;&middot;&nbsp; <em>Dec 2023–Aug 2024</em></div>
+          <ul class="resume-bullets">
+            <li>Led end-to-end research operations for spatial memory research with 20 lab mice.</li>
+            <li>Spearheaded data analysis on MATLAB; created visualizations in GraphPad used in the final research paper.</li>
+            <li>Presented results to 20 academic professionals and conducted literature search to support publication.</li>
+          </ul>
+        </div>
+        <div class="resume-entry">
+          <div class="resume-entry-header">
+            <span class="resume-org">Jewels for Joy</span>
+            <span class="resume-loc">Istanbul, Turkey</span>
+          </div>
+          <div class="resume-entry-sub">Social Media &amp; Marketing Manager &nbsp;&middot;&nbsp; <em>Apr 2021–Sep 2022</em></div>
+          <ul class="resume-bullets">
+            <li>Developed content strategies to promote the brand's message and unique designs.</li>
+            <li>Grew Instagram following from 320 to 1,000 — a 212.5% increase in audience engagement.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="resume-section">
+        <div class="resume-section-label">Projects</div>
+        <div class="resume-entry">
+          <div class="resume-entry-sub"><strong>RentEase</strong></div>
+          <p class="resume-entry-note">Led product ideation, feature architecture, and UX design. Designed end-to-end user flows on Figma for digital lease agreements and integrated a dual rating system.</p>
+        </div>
+        <div class="resume-entry">
+          <div class="resume-entry-sub"><strong>NetPreneur</strong></div>
+          <p class="resume-entry-note">Conducted need-finding interviews with 5 industry stakeholders, led GTM strategy, and optimized workflow integration with legacy tech systems.</p>
+        </div>
+        <div class="resume-entry">
+          <div class="resume-entry-sub"><strong>NeuroSync</strong></div>
+          <p class="resume-entry-note">Spearheaded concept development, UX strategy, and authored the product requirement document.</p>
+        </div>
+        <div class="resume-entry">
+          <div class="resume-entry-sub"><strong>ReStart</strong></div>
+          <p class="resume-entry-note">Led product ideation and UX through lo-fi mockups on Figma. Mapped 5 user personas, pain points, and core feature workflows.</p>
+        </div>
+      </div>
+
+      <div class="resume-section">
+        <div class="resume-section-label">Additional</div>
+        <div class="resume-entry">
+          <p class="resume-entry-note"><strong>Professional:</strong> Product School &lt;ProductCon&gt; Participant, Gartner Consulting Training Bootcamp</p>
+          <p class="resume-entry-note"><strong>Skills:</strong> Turkish (fluent), Spanish (conversational), French (beginner), Python, MATLAB, Excel, SQL, Figma, Adobe Photoshop, Adobe Illustrator, AutoCAD, Google Workspace, Slack, AI tools</p>
+          <p class="resume-entry-note"><strong>Certifications:</strong> Product Management (IBM), Fundamentals of UX Design (Google)</p>
+          <p class="resume-entry-note"><strong>Courses:</strong> Data Science, Data Mining, Predictive Analytics, Business Analytics, AI, Sustainable Business Strategy, Product Management</p>
+        </div>
+      </div>
+
+    </div>
+    <div class="copyright">&#169; 2026 Edvina Bahar</div>
   </div>
 
   <!-- EXPERIENCE PAGE -->
@@ -1362,6 +1562,8 @@
     });
 
     // ── Home page buttons ──
+    document.getElementById('home-resume-btn').addEventListener('click', function(e) { e.preventDefault(); showPage('resume-page'); });
+    document.getElementById('resume-back').addEventListener('click', function() { showPage('home-page'); });
     document.getElementById('home-exp-btn').addEventListener('click', function() { showPage('experience-page'); });
     document.getElementById('home-proj-btn').addEventListener('click', function() { showPage('projects-page'); });
 
