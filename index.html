@@ -1499,8 +1499,60 @@
         </div>
         <span class="proj-card-arr">&#x2192;</span>
       </div>
+      <div class="proj-card" id="netpreneur-card" style="cursor:pointer;">
+        <div class="proj-card-top">
+          <div class="proj-card-name">NetPreneur</div>
+          <div class="proj-card-tags">Product Design &middot; Strategy &middot; 2026</div>
+        </div>
+        <span class="proj-card-arr">&#x2192;</span>
+      </div>
       <div class="proj-card proj-card-empty"></div>
-      <div class="proj-card proj-card-empty"></div>
+    </div>
+    <div class="copyright">&#169; 2026 Edvina Bahar</div>
+  </div>
+
+  <!-- NETPRENEUR DETAIL PAGE -->
+  <div id="netpreneur-page" class="page inner-page">
+    <div class="inner-header">
+      <button class="back-btn" id="netpreneur-back">&#8592; Projects</button>
+      <h1 class="inner-title">NetPreneur</h1>
+    </div>
+    <div class="project-detail">
+      <p class="project-tagline">A vetted network connecting early-stage founders to investors on milestone-based terms.</p>
+
+      <div class="detail-meta">
+        <div class="detail-meta-item"><span class="detail-meta-label">Type</span><span>Self-directed</span></div>
+        <div class="detail-meta-item"><span class="detail-meta-label">Role</span><span>Product Design &amp; Strategy</span></div>
+        <div class="detail-meta-item"><span class="detail-meta-label">Year</span><span>2026</span></div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-label">Project Overview</div>
+        <p>NetPreneur is a vetted network where early-stage founders and investors meet on structured, milestone-based funding terms instead of cold outreach. The project started as an unstructured idea dump I wrote while preparing for PM interviews, aka, a list of features with no hierarchy, no metrics, and one unanswered question I had left for myself in the margin: would an approval process drive users away? I took it back up as a full design exercise, and the work became about deciding which half of that dump to cut.</p>
+        <p>The core problem is a two-sided filtering failure. Founders without a network have no credible way to signal legitimacy to capital, and investors drown in unqualified inbound they can only screen after the pitch has already cost them time. Neither side lacks access to a network; both lack a filter. NetPreneur makes the filter the product: a human vetting panel gates the supply side, and every conversation opens against a milestone plan rather than an open-ended ask.</p>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-label">What I Did</div>
+        <p>I wrote the full PRD. From problem framing, user and customer segmentation, goals and explicit non-goals, a P0–P2 feature set, a metrics tree, to monetization, competitive positioning, and a risk register. I separated users from customers early (founders drive engagement, investors carry the revenue), which is what let me resolve most later trade-offs without guessing.</p>
+        <p>I designed three flows end to end (founder signup through vetting to approval, investor curated deal flow through bidding, and the expert Q&amp;A and marketplace) as low-fidelity wireframes in Figma, then took the investor deal flow to high fidelity as the screen the business actually depends on. I also built the metrics layer the original notes were missing: a north star (verified matches reaching a first offer), targets at every funnel stage, and a leakage guardrail for the case where both sides take the conversation off-platform.</p>
+        <p>Two things from my own notes I argued against in the final document. I cut paid signup incentives, because paying to acquire supply in a curation product buys exactly the users the curation exists to remove. And I cut advertising revenue entirely because an investor evaluating a founder cannot be shown a paid placement without the neutrality of the ranking coming into question, which is the one asset the business is built on.</p>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-label">What I Learned</div>
+        <div class="learnings-list">
+          <div class="learning-item">
+            <p>I learned that the friction I was most worried about was the product. My original idea asked whether the approval gate would drive users away, and I had assumed the answer was to soften it. It wasn't — the gate is the only reason an investor would pay for the deal flow, so the design work was making the wait survivable rather than making the bar lower: read-only access while pending, rejections that name the two specific gaps, and a regional async fallback so geography is never the reason someone can't get in.</p>
+          </div>
+          <div class="learning-item">
+            <p>I learned to write non-goals with the same care as goals. The initial idea had a competitive-landscape page, a legacy-integration assessment, and a cybersecurity module all sitting at the same level as matching. Cutting them to P2 made the v1 legible enough that a team could scope it, and it clarified that the platform structures deals but never processes capital, which keeps the whole regulatory question out of scope.</p>
+          </div>
+          <div class="learning-item">
+            <p>I learned to pick metrics that resist being gamed. Signups, DMs sent, and time on site all move when the product is failing. Matches that reach an offer only moves when both sides get value, and pairing it with an off-platform leakage guardrail forced me to design for the case where the product succeeds at introductions and then loses the relationship anyway.</p>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="copyright">&#169; 2026 Edvina Bahar</div>
   </div>
@@ -1804,6 +1856,13 @@
                      });
         if (reCard) reCard.addEventListener('click', function() { showPage('rentease-page'); });
 
+        // re-bind netpreneur card click
+        var npCard = document.querySelector('#projects-page #netpreneur-card') ||
+                     Array.from(document.querySelectorAll('#projects-page .proj-card')).find(function(c) {
+                       return c.textContent.includes('NetPreneur');
+                     });
+        if (npCard) npCard.addEventListener('click', function() { showPage('netpreneur-page'); });
+
         if (projPage) {
           projPage.addEventListener('mouseenter', startTrail);
           projPage.addEventListener('mouseleave', stopTrail);
@@ -1819,60 +1878,116 @@
       if (!wc) return;
       var wctx = wc.getContext('2d');
       var expPage = document.getElementById('experience-page');
+      // palette drawn from the reference swatches
       var PALETTE = [
-        [201, 74, 168], [63, 158, 143], [43, 58, 143], [90, 160, 106],
-        [226, 98, 47], [184, 58, 46], [122, 79, 176], [169, 185, 217], [209, 122, 160]
+        [226, 118, 38], [124, 150, 205], [27, 54, 120], [186, 160, 210],
+        [178, 130, 44], [58, 163, 114], [172, 205, 235], [214, 49, 143],
+        [238, 142, 130], [181, 42, 106], [122, 31, 82], [196, 210, 79]
       ];
-      var blobs = [], ci = 0, sized = false;
+      var TYPES = ['splotch', 'ellipse', 'floral', 'blob'];
+      var shapes = [], sized = false, lastX = null, lastY = null;
+      var GAP = 46; // spacing between marks — keeps the trail calm, not overwhelming
 
       function sizeWc() { wc.width = window.innerWidth; wc.height = window.innerHeight; sized = true; }
       function expActive() { return expPage && expPage.classList.contains('active'); }
+      function rand(a, b) { return a + Math.random() * (b - a); }
+
+      // bake a watercolor shape onto an offscreen canvas once (cheap to redraw while fading)
+      function bake(g, type, col, base) {
+        function rg(cx, cy, rad, peak) {
+          var gr = g.createRadialGradient(cx, cy, 0, cx, cy, rad);
+          gr.addColorStop(0,    'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + (peak * 0.9) + ')');
+          gr.addColorStop(0.45, 'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',' + (peak * 0.5) + ')');
+          gr.addColorStop(1,    'rgba(' + col[0] + ',' + col[1] + ',' + col[2] + ',0)');
+          return gr;
+        }
+        if (type === 'ellipse') {
+          g.save(); g.scale(1, 0.66);
+          g.fillStyle = rg(0, 0, base, 0.85);
+          g.beginPath(); g.arc(0, 0, base, 0, Math.PI * 2); g.fill();
+          g.restore();
+        } else if (type === 'blob') {
+          var m = 3 + Math.floor(Math.random() * 2);
+          for (var i = 0; i < m; i++) {
+            var dx = rand(-base * 0.5, base * 0.5), dy = rand(-base * 0.5, base * 0.5), r = base * rand(0.5, 0.8);
+            g.fillStyle = rg(dx, dy, r, 0.8);
+            g.beginPath(); g.arc(dx, dy, r, 0, Math.PI * 2); g.fill();
+          }
+        } else if (type === 'floral') {
+          var petals = 5 + Math.floor(Math.random() * 3);
+          for (var p = 0; p < petals; p++) {
+            var ang = (p / petals) * Math.PI * 2;
+            g.save();
+            g.translate(Math.cos(ang) * base * 0.5, Math.sin(ang) * base * 0.5);
+            g.rotate(ang); g.scale(1, 0.45);
+            g.fillStyle = rg(0, 0, base * 0.52, 0.8);
+            g.beginPath(); g.arc(0, 0, base * 0.52, 0, Math.PI * 2); g.fill();
+            g.restore();
+          }
+          g.fillStyle = rg(0, 0, base * 0.42, 0.95);
+          g.beginPath(); g.arc(0, 0, base * 0.42, 0, Math.PI * 2); g.fill();
+        } else { // splotch — organic bleed with a concentrated core
+          var n = 11, pts = [];
+          for (var k = 0; k < n; k++) {
+            var t = (k / n) * Math.PI * 2, rr = base * rand(0.78, 1.14);
+            pts.push({ x: Math.cos(t) * rr, y: Math.sin(t) * rr });
+          }
+          g.fillStyle = rg(0, 0, base * 1.15, 0.85);
+          g.beginPath();
+          g.moveTo((pts[n - 1].x + pts[0].x) / 2, (pts[n - 1].y + pts[0].y) / 2);
+          for (var q = 0; q < n; q++) {
+            var cur = pts[q], nxt = pts[(q + 1) % n];
+            g.quadraticCurveTo(cur.x, cur.y, (cur.x + nxt.x) / 2, (cur.y + nxt.y) / 2);
+          }
+          g.closePath(); g.fill();
+          g.fillStyle = rg(0, 0, base * 0.45, 0.9);
+          g.beginPath(); g.arc(0, 0, base * 0.45, 0, Math.PI * 2); g.fill();
+        }
+      }
+
+      function makeShape(x, y) {
+        var type = TYPES[Math.floor(Math.random() * TYPES.length)];
+        var col = PALETTE[Math.floor(Math.random() * PALETTE.length)];
+        var base = rand(16, 22); // ~1cm core, matching the heatmap spot
+        var half = Math.ceil(base * 1.6);
+        var oc = document.createElement('canvas');
+        oc.width = half * 2; oc.height = half * 2;
+        var octx = oc.getContext('2d');
+        octx.translate(half, half);
+        octx.rotate(rand(0, Math.PI * 2));
+        bake(octx, type, col, base);
+        return { x: x, y: y, oc: oc, half: half, alpha: rand(0.5, 0.66), decay: rand(0.004, 0.0065) };
+      }
 
       function onWcMove(e) {
         if (!expActive()) return;
         if (!sized) sizeWc();
         wc.classList.add('visible');
-        ci = (ci + 1) % PALETTE.length;
-        blobs.push({
-          x: e.clientX, y: e.clientY,
-          rx: 18 + Math.random() * 4,
-          ry: 13 + Math.random() * 4,
-          rot: Math.random() * Math.PI,
-          col: PALETTE[ci],
-          alpha: 0.5 + Math.random() * 0.15,
-          decay: 0.006 + Math.random() * 0.005
-        });
-        if (blobs.length > 200) blobs.splice(0, blobs.length - 200);
+        if (lastX === null) { lastX = e.clientX; lastY = e.clientY; }
+        var dx = e.clientX - lastX, dy = e.clientY - lastY;
+        if (Math.sqrt(dx * dx + dy * dy) < GAP) return;
+        lastX = e.clientX; lastY = e.clientY;
+        shapes.push(makeShape(e.clientX, e.clientY));
+        if (shapes.length > 42) shapes.splice(0, shapes.length - 42);
       }
 
       function wcLoop() {
         wctx.clearRect(0, 0, wc.width, wc.height);
         if (!expActive()) {
-          if (blobs.length) blobs = [];
+          if (shapes.length) shapes = [];
+          lastX = lastY = null;
           wc.classList.remove('visible');
           requestAnimationFrame(wcLoop);
           return;
         }
-        for (var i = blobs.length - 1; i >= 0; i--) {
-          var b = blobs[i];
-          b.alpha -= b.decay;
-          if (b.alpha <= 0) { blobs.splice(i, 1); continue; }
-          wctx.save();
-          wctx.globalAlpha = b.alpha;
-          wctx.translate(b.x, b.y);
-          wctx.rotate(b.rot);
-          wctx.scale(1, b.ry / b.rx);
-          var c = b.col;
-          var g = wctx.createRadialGradient(0, 0, 0, 0, 0, b.rx);
-          g.addColorStop(0,    'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',0.85)');
-          g.addColorStop(0.55, 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',0.35)');
-          g.addColorStop(1,    'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',0)');
-          wctx.fillStyle = g;
-          wctx.beginPath();
-          wctx.arc(0, 0, b.rx, 0, Math.PI * 2);
-          wctx.fill();
-          wctx.restore();
+        for (var i = shapes.length - 1; i >= 0; i--) {
+          var s = shapes[i];
+          s.alpha -= s.decay;
+          if (s.alpha <= 0) { shapes.splice(i, 1); continue; }
+          wctx.globalAlpha = s.alpha;
+          wctx.drawImage(s.oc, s.x - s.half, s.y - s.half);
         }
+        wctx.globalAlpha = 1;
         requestAnimationFrame(wcLoop);
       }
 
@@ -2023,6 +2138,8 @@
     document.getElementById('vision-back').addEventListener('click', function() { showPage('experience-page'); });
     document.getElementById('rentease-card').addEventListener('click', function() { showPage('rentease-page'); });
     document.getElementById('rentease-back').addEventListener('click', function() { showPage('projects-page'); });
+    document.getElementById('netpreneur-card').addEventListener('click', function() { showPage('netpreneur-page'); });
+    document.getElementById('netpreneur-back').addEventListener('click', function() { showPage('projects-page'); });
     document.getElementById('proj-back').addEventListener('click', function() { showPage('home-page'); });
     document.getElementById('about-back').addEventListener('click', function() { showPage('home-page'); });
 
