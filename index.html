@@ -997,6 +997,7 @@
       transition: opacity 0.4s ease;
     }
     #watercolor-canvas.visible { opacity: 1; }
+    #watercolor-canvas, #kusama-canvas { max-width: none; margin: 0; }
 
     /* ANIMATIONS */
     @keyframes fadeIn {
@@ -1887,8 +1888,18 @@
       var TYPES = ['splotch', 'ellipse', 'floral', 'blob'];
       var shapes = [], sized = false, lastX = null, lastY = null;
       var GAP = 46; // spacing between marks — keeps the trail calm, not overwhelming
+      var cssW = 0, cssH = 0;
+      var dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
 
-      function sizeWc() { wc.width = window.innerWidth; wc.height = window.innerHeight; sized = true; }
+      function sizeWc() {
+        var rect = wc.getBoundingClientRect();
+        cssW = rect.width || window.innerWidth;
+        cssH = rect.height || window.innerHeight;
+        wc.width = Math.round(cssW * dpr);
+        wc.height = Math.round(cssH * dpr);
+        wctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        sized = true;
+      }
       function expActive() { return expPage && expPage.classList.contains('active'); }
       function rand(a, b) { return a + Math.random() * (b - a); }
 
@@ -1902,7 +1913,7 @@
           return gr;
         }
         if (type === 'ellipse') {
-          g.save(); g.scale(1, 0.66);
+          g.save(); g.scale(1, 0.92);
           g.fillStyle = rg(0, 0, base, 0.85);
           g.beginPath(); g.arc(0, 0, base, 0, Math.PI * 2); g.fill();
           g.restore();
@@ -1919,7 +1930,7 @@
             var ang = (p / petals) * Math.PI * 2;
             g.save();
             g.translate(Math.cos(ang) * base * 0.5, Math.sin(ang) * base * 0.5);
-            g.rotate(ang); g.scale(1, 0.45);
+            g.rotate(ang); g.scale(1, 0.62);
             g.fillStyle = rg(0, 0, base * 0.52, 0.8);
             g.beginPath(); g.arc(0, 0, base * 0.52, 0, Math.PI * 2); g.fill();
             g.restore();
@@ -1929,7 +1940,7 @@
         } else { // splotch — organic bleed with a concentrated core
           var n = 11, pts = [];
           for (var k = 0; k < n; k++) {
-            var t = (k / n) * Math.PI * 2, rr = base * rand(0.78, 1.14);
+            var t = (k / n) * Math.PI * 2, rr = base * rand(0.9, 1.08);
             pts.push({ x: Math.cos(t) * rr, y: Math.sin(t) * rr });
           }
           g.fillStyle = rg(0, 0, base * 1.15, 0.85);
@@ -1954,7 +1965,6 @@
         oc.width = half * 2; oc.height = half * 2;
         var octx = oc.getContext('2d');
         octx.translate(half, half);
-        octx.rotate(rand(0, Math.PI * 2));
         bake(octx, type, col, base);
         return { x: x, y: y, oc: oc, half: half, alpha: rand(0.5, 0.66), decay: rand(0.004, 0.0065) };
       }
@@ -1963,16 +1973,18 @@
         if (!expActive()) return;
         if (!sized) sizeWc();
         wc.classList.add('visible');
-        if (lastX === null) { lastX = e.clientX; lastY = e.clientY; }
-        var dx = e.clientX - lastX, dy = e.clientY - lastY;
+        var rect = wc.getBoundingClientRect();
+        var x = e.clientX - rect.left, y = e.clientY - rect.top;
+        if (lastX === null) { lastX = x; lastY = y; }
+        var dx = x - lastX, dy = y - lastY;
         if (Math.sqrt(dx * dx + dy * dy) < GAP) return;
-        lastX = e.clientX; lastY = e.clientY;
-        shapes.push(makeShape(e.clientX, e.clientY));
+        lastX = x; lastY = y;
+        shapes.push(makeShape(x, y));
         if (shapes.length > 42) shapes.splice(0, shapes.length - 42);
       }
 
       function wcLoop() {
-        wctx.clearRect(0, 0, wc.width, wc.height);
+        wctx.clearRect(0, 0, cssW, cssH);
         if (!expActive()) {
           if (shapes.length) shapes = [];
           lastX = lastY = null;
