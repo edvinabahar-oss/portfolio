@@ -999,6 +999,20 @@
     #watercolor-canvas.visible { opacity: 1; }
     #watercolor-canvas, #kusama-canvas { max-width: none; margin: 0; }
 
+    .crossing-links { display: flex; flex-direction: column; gap: 10px; margin-top: 6px; }
+    .crossing-link {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      color: #0F0F0E;
+      text-decoration: none;
+      border: 0.5px solid rgba(15, 15, 14, 0.25);
+      border-radius: 2px;
+      padding: 12px 16px;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .crossing-link:hover { background: #0F0F0E; color: #F5F2ED; }
+
     /* ANIMATIONS */
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(8px); }
@@ -1262,6 +1276,41 @@
       <div class="exp-card" id="j4j-card" style="cursor:pointer;">
         <div class="exp-card-name">Jewels for Joy</div>
         <div class="exp-card-label">Marketing &middot; 2021 &#x2192;</div>
+      </div>
+      <div class="exp-card" id="crossing-card" style="cursor:pointer;">
+        <div class="exp-card-name">Crossing Paths</div>
+        <div class="exp-card-label">Interview Series &middot; Ongoing &#x2192;</div>
+      </div>
+    </div>
+    <div class="copyright">&#169; 2026 Edvina Bahar</div>
+  </div>
+
+  <!-- CROSSING PATHS PAGE -->
+  <div id="crossing-page" class="page inner-page">
+    <div class="inner-header">
+      <button class="back-btn" id="crossing-back">&#8592; Experience</button>
+      <h1 class="inner-title">Crossing Paths</h1>
+    </div>
+    <div class="project-detail">
+      <p class="project-tagline">A platform where I interview accomplished Turks living abroad about their career trajectories and the industries they work in.</p>
+
+      <div class="detail-meta">
+        <div class="detail-meta-item"><span class="detail-meta-label">Format</span><span>Interview Series</span></div>
+        <div class="detail-meta-item"><span class="detail-meta-label">Role</span><span>Host &amp; Creator</span></div>
+        <div class="detail-meta-item"><span class="detail-meta-label">When</span><span>Ongoing</span></div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-label">About</div>
+        <p>Crossing Paths is a platform where I interview Turks who live abroad and have built accomplished careers, exploring their individual career trajectories and the industries they work in. Each conversation traces how they got to where they are — the decisions, the detours, and the lessons along the way.</p>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-label">Watch the Interviews</div>
+        <div class="crossing-links">
+          <a href="https://www.youtube.com/live/BxHeH48rp2w?si=xGD-QdA8G3eTBD4u" target="_blank" rel="noopener" class="crossing-link">Interview 01 &#x2197;</a>
+          <a href="https://www.youtube.com/live/gEA-GBpCNsc?si=zZ8YgtIEiNST-csm" target="_blank" rel="noopener" class="crossing-link">Interview 02 &#x2197;</a>
+        </div>
       </div>
     </div>
     <div class="copyright">&#169; 2026 Edvina Bahar</div>
@@ -2144,6 +2193,8 @@
     document.getElementById('kim-back').addEventListener('click', function() { showPage('experience-page'); });
     document.getElementById('j4j-card').addEventListener('click', function() { showPage('j4j-page'); });
     document.getElementById('j4j-back').addEventListener('click', function() { showPage('experience-page'); });
+    document.getElementById('crossing-card').addEventListener('click', function() { showPage('crossing-page'); });
+    document.getElementById('crossing-back').addEventListener('click', function() { showPage('experience-page'); });
     document.getElementById('vision-card').addEventListener('click', function() { showPage('vision-page'); });
     document.getElementById('allotex-card').addEventListener('click', function() { showPage('allotex-page'); });
     document.getElementById('allotex-back').addEventListener('click', function() { showPage('experience-page'); });
