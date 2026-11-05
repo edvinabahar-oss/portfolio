@@ -1535,13 +1535,13 @@
       <h1 class="inner-title">Projects</h1>
     </div>
     <div class="projects-grid">
-      <a href="https://edvinabahar-oss.github.io/Trackly/trackly.html" target="_blank" rel="noopener" class="proj-card">
+      <div class="proj-card" id="trackly-card" style="cursor:pointer;">
         <div class="proj-card-top">
           <div class="proj-card-name">Trackly</div>
           <div class="proj-card-tags">Web App &middot; Product &middot; Strategy &middot; 2026</div>
         </div>
-        <span class="proj-card-arr">&#x2197;</span>
-      </a>
+        <span class="proj-card-arr">&#x2192;</span>
+      </div>
       <div class="proj-card" id="rentease-card" style="cursor:pointer;">
         <div class="proj-card-top">
           <div class="proj-card-name">RentEase</div>
@@ -1557,6 +1557,43 @@
         <span class="proj-card-arr">&#x2192;</span>
       </div>
       <div class="proj-card proj-card-empty"></div>
+    </div>
+    <div class="copyright">&#169; 2026 Edvina Bahar</div>
+  </div>
+
+  <!-- TRACKLY DETAIL PAGE -->
+  <div id="trackly-page" class="page inner-page">
+    <div class="inner-header">
+      <button class="back-btn" id="trackly-back">&#8592; Projects</button>
+      <h1 class="inner-title">Trackly</h1>
+    </div>
+    <div class="project-detail">
+      <p class="project-tagline">A single-file job application tracker that keeps the whole search in one place.</p>
+
+      <div class="detail-meta">
+        <div class="detail-meta-item"><span class="detail-meta-label">Type</span><span>Self-directed</span></div>
+        <div class="detail-meta-item"><span class="detail-meta-label">Role</span><span>Product · UX Design · Strategy</span></div>
+        <div class="detail-meta-item"><span class="detail-meta-label">Year</span><span>2026</span></div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-label">Overview</div>
+        <p>Trackly is a single-file web app for tracking job applications. Each application can be updated through an edit modal and carries its own interview notes, and all data is stored in the browser.</p>
+        <p>Applications can be imported from and exported to Excel or CSV. A LinkedIn bookmarklet adds jobs straight from a listing, a Gmail scan auto-updates application statuses, and AI features run on the user's own Anthropic API key.</p>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-label">What I Did</div>
+        <p>I defined the product concept, UX, and interface for Trackly, working from customer pain points. I wrote the PRD and set the product vision.</p>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-label">Links</div>
+        <div class="crossing-links">
+          <a href="https://edvinabahar-oss.github.io/Trackly/trackly.html" target="_blank" rel="noopener" class="crossing-link">Open Trackly &#x2197;</a>
+          <a href="https://github.com/edvinabahar-oss/Trackly" target="_blank" rel="noopener" class="crossing-link">View on GitHub &#x2197;</a>
+        </div>
+      </div>
     </div>
     <div class="copyright">&#169; 2026 Edvina Bahar</div>
   </div>
@@ -1913,6 +1950,10 @@
                      });
         if (npCard) npCard.addEventListener('click', function() { showPage('netpreneur-page'); });
 
+        // re-bind trackly card click
+        var trCard = document.querySelector('#projects-page #trackly-card');
+        if (trCard) trCard.addEventListener('click', function() { showPage('trackly-page'); });
+
         if (projPage) {
           projPage.addEventListener('mouseenter', startTrail);
           projPage.addEventListener('mouseleave', stopTrail);
@@ -2203,6 +2244,8 @@
     document.getElementById('rentease-back').addEventListener('click', function() { showPage('projects-page'); });
     document.getElementById('netpreneur-card').addEventListener('click', function() { showPage('netpreneur-page'); });
     document.getElementById('netpreneur-back').addEventListener('click', function() { showPage('projects-page'); });
+    document.getElementById('trackly-card').addEventListener('click', function() { showPage('trackly-page'); });
+    document.getElementById('trackly-back').addEventListener('click', function() { showPage('projects-page'); });
     document.getElementById('proj-back').addEventListener('click', function() { showPage('home-page'); });
     document.getElementById('about-back').addEventListener('click', function() { showPage('home-page'); });
 
