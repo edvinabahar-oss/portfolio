@@ -1229,6 +1229,10 @@
           <div class="resume-entry-sub"><strong>Trackly</strong></div>
           <p class="resume-entry-note">Spearheaded concept development, UX and UI design, and identified customer pain points. Authored the product requirement document and defined the vision for the product.</p>
         </div>
+        <div class="resume-entry">
+          <div class="resume-entry-sub"><strong>Amber</strong></div>
+          <p class="resume-entry-note">Designed and built a real-time voice language tutor across 7 languages; defined the tutoring rules (target-language only, one correction per turn, hints after repeated attempts) and an audio-reactive character interface.</p>
+        </div>
       </div>
 
       <div class="resume-section">
@@ -1556,7 +1560,13 @@
         </div>
         <span class="proj-card-arr">&#x2192;</span>
       </div>
-      <div class="proj-card proj-card-empty"></div>
+      <div class="proj-card" id="amber-card" style="cursor:pointer;">
+        <div class="proj-card-top">
+          <div class="proj-card-name">Amber</div>
+          <div class="proj-card-tags">Voice AI &middot; Product &middot; Design &middot; 2026</div>
+        </div>
+        <span class="proj-card-arr">&#x2192;</span>
+      </div>
     </div>
     <div class="copyright">&#169; 2026 Edvina Bahar</div>
   </div>
@@ -1600,6 +1610,71 @@
           </div>
           <div class="learning-item">
             <p>I learned to pick metrics that resist being gamed. Signups, DMs sent, and time on site all move when the product is failing. Matches that reach an offer only moves when both sides get value, and pairing it with an off-platform leakage guardrail forced me to design for the case where the product succeeds at introductions and then loses the relationship anyway.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="copyright">&#169; 2026 Edvina Bahar</div>
+  </div>
+
+  <!-- AMBER DETAIL PAGE -->
+  <div id="amber-page" class="page inner-page">
+    <div class="inner-header">
+      <button class="back-btn" id="amber-back">&#8592; Projects</button>
+      <a href="amber.html" target="_blank" rel="noopener" class="inner-title-link">
+        <h1 class="inner-title">Amber &#x2197;</h1>
+      </a>
+    </div>
+    <div class="project-detail">
+      <p class="project-tagline">A voice tutor that keeps you speaking. No English escape hatch, gentle corrections, and a little clay buddy who only talks in the language you're learning.</p>
+
+      <div class="detail-meta">
+        <div class="detail-meta-item"><span class="detail-meta-label">Type</span><span>Self-directed</span></div>
+        <div class="detail-meta-item"><span class="detail-meta-label">Role</span><span>Product &middot; Design &middot; Build</span></div>
+        <div class="detail-meta-item"><span class="detail-meta-label">Year</span><span>2026</span></div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-label">Project Overview</div>
+        <p>Most language apps teach you to tap, not to talk. You can finish a streak without ever saying a full sentence out loud, and the moment a real conversation gets hard, there's always an English button to retreat to. Amber is a real-time voice tutor built around one idea: the fastest way to get comfortable speaking is to never be allowed to stop.</p>
+        <p>You pick a language (Spanish, French, Italian, German, Portuguese, Norwegian or Japanese), tap the character, and start talking. Amber replies out loud, keeps a live transcript, and reacts to your voice as you speak. It stays in the target language the whole time, fixes one mistake per turn inside its reply, and only offers a few words of English after you've genuinely tried and stalled.</p>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-label">How It Works</div>
+        <div class="learnings-list">
+          <div class="learning-item">
+            <div class="learning-title">Always in language</div>
+            <p>Asking for English gets a kind "no" and an easier rephrasing, so the learner stays in the language instead of switching out.</p>
+          </div>
+          <div class="learning-item">
+            <div class="learning-title">One fix per turn</div>
+            <p>Corrections are woven into the reply ("ah, you have <em>una</em> reunión today") rather than delivered as a grammar lecture, so the conversation never stops for a lesson.</p>
+          </div>
+          <div class="learning-item">
+            <div class="learning-title">Five tries, then a hint</div>
+            <p>When the learner is stuck, Amber gives a tiny English hint for the one word they're missing, then goes straight back to the target language.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-label">What I Did</div>
+        <p>I defined the tutoring rules, designed the interface, and built the app. The voice runs over a real-time speech-to-speech connection, so there's no push-to-talk and no waiting for a full sentence to be transcribed before the tutor responds. The character's mouth and body are driven by live audio levels from both the microphone and the tutor's voice, which makes it obvious whose turn it is without any extra UI.</p>
+        <p>The visual direction is warm and tactile on purpose: soft clay shapes, paper grain and an autumn palette. Speaking a new language out loud is the most intimidating part of learning one, and I wanted the product to feel like a low-stakes chat with a friendly creature, not a test.</p>
+      </div>
+
+      <div class="detail-section">
+        <div class="detail-section-label">What I Learned</div>
+        <div class="learnings-list">
+          <div class="learning-item">
+            <p>I learned that the most important product decisions were constraints, not features. "Never switch to English" and "only one correction per turn" did more for the experience than anything I added, because they decided what the tutor is not allowed to do.</p>
+          </div>
+          <div class="learning-item">
+            <p>I learned that in a voice product, feedback has to be ambient. With no buttons to press mid-conversation, the character's reactions became the interface: they tell you it's listening, thinking, or talking without breaking eye contact with the conversation.</p>
+          </div>
+          <div class="learning-item">
+            <p>I learned to design the escape hatch carefully. A hint that arrives too early removes the productive struggle; one that never arrives makes people quit. Tying it to repeated attempts kept learners trying without leaving them stuck.</p>
           </div>
         </div>
       </div>
@@ -1913,6 +1988,9 @@
                      });
         if (npCard) npCard.addEventListener('click', function() { showPage('netpreneur-page'); });
 
+        var amCard = document.querySelector("#projects-page #amber-card");
+        if (amCard) amCard.addEventListener("click", function() { showPage("amber-page"); });
+
         if (projPage) {
           projPage.addEventListener('mouseenter', startTrail);
           projPage.addEventListener('mouseleave', stopTrail);
@@ -2203,6 +2281,8 @@
     document.getElementById('rentease-back').addEventListener('click', function() { showPage('projects-page'); });
     document.getElementById('netpreneur-card').addEventListener('click', function() { showPage('netpreneur-page'); });
     document.getElementById('netpreneur-back').addEventListener('click', function() { showPage('projects-page'); });
+    document.getElementById("amber-card").addEventListener("click", function() { showPage("amber-page"); });
+    document.getElementById("amber-back").addEventListener("click", function() { showPage("projects-page"); });
     document.getElementById('proj-back').addEventListener('click', function() { showPage('home-page'); });
     document.getElementById('about-back').addEventListener('click', function() { showPage('home-page'); });
 
