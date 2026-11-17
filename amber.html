@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>Amber — voice language tutor (demo)</title>
+<title>Amber — voice language tutor</title>
 <meta name="description" content="Amber is a real-time voice tutor that keeps you speaking in the language you're learning. Interactive demo by Edvina Bahar." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -11,16 +11,19 @@
 <style>
   :root {
     --paper: #F6EFE6;
+    --card: #FFF9F2;
     --ink: #2A1A12;
     --ink-soft: #6E5446;
+    --ink-faint: #A08878;
     --rust: #C2501F;
     --rust-soft: #F6D9C4;
     --ochre: #E0A04A;
     --berry: #B4372E;
     --mustard: #E7B648;
+    --moss: #5E8F52;
     --sky-1: #FDEBDD;
     --sky-2: #F7D4BA;
-    --hair: rgba(110, 84, 70, 0.14);
+    --hair: rgba(110, 84, 70, 0.16);
     --font: "Figtree", -apple-system, BlinkMacSystemFont, "Helvetica Neue", system-ui, sans-serif;
     --level: 0;
     --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.3 0 0 0 0 0.2 0 0 0 0 0.1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -28,8 +31,10 @@
   * { box-sizing: border-box; margin: 0; }
   html, body { min-height: 100%; }
   body { font-family: var(--font); color: var(--ink); background: var(--paper); -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-  body::before { content: ""; position: fixed; inset: 0; background: var(--grain); opacity: .22; pointer-events: none; z-index: 50; mix-blend-mode: multiply; }
+  body::before { content: ""; position: fixed; inset: 0; background: var(--grain); opacity: .2; pointer-events: none; z-index: 50; mix-blend-mode: multiply; }
+  button { font: inherit; color: inherit; }
 
+  /* clay material */
   .clay {
     --c: var(--rust);
     position: relative;
@@ -43,105 +48,142 @@
   }
   .clay::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--grain); opacity: .35; mix-blend-mode: overlay; pointer-events: none; }
 
-  .app { max-width: 1120px; margin: 0 auto; padding: max(18px, env(safe-area-inset-top)) 16px 40px; }
+  .app { max-width: 1160px; margin: 0 auto; padding: max(18px, env(safe-area-inset-top)) 20px 64px; }
 
-  header { display: flex; align-items: center; justify-content: space-between; height: 44px; gap: 12px; }
+  /* top bar */
+  header { display: flex; align-items: center; justify-content: space-between; height: 48px; gap: 12px; }
   .brand { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 22px; letter-spacing: -.04em; }
   .brand .clay { width: 22px; height: 22px; border-radius: 50%; --c: var(--ochre); box-shadow: inset -3px -4px 6px rgba(120,55,15,.45), inset 2px 3px 4px rgba(255,235,200,.6); }
-  .head-right { display: flex; align-items: center; gap: 8px; }
-  .back-link { font-size: 13px; font-weight: 500; color: var(--ink-soft); text-decoration: none; padding: 7px 4px; }
+  .head-right { display: flex; align-items: center; gap: 14px; }
+  .back-link { font-size: 14px; font-weight: 500; color: var(--ink-soft); text-decoration: none; }
   .back-link:hover { color: var(--ink); }
-  .status-pill { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; color: var(--ink-soft);
-                 padding: 7px 13px; border-radius: 999px; background: #fff8f0; border: 1px solid var(--hair); }
-  .status-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: #CDB6A6; }
-  .live .status-pill .dot { background: #5E9E58; box-shadow: 0 0 0 3px rgba(94,158,88,.2); }
+  .status-pill { display: flex; align-items: center; gap: 7px; font-size: 13px; font-weight: 500; color: var(--ink-soft); padding: 7px 13px; border-radius: 999px; background: #fff8f0; border: 1px solid var(--hair); }
+  .status-pill .dot { width: 7px; height: 7px; border-radius: 50%; background: #CDB6A6; transition: background .2s; }
+  .live .status-pill .dot { background: var(--moss); box-shadow: 0 0 0 3px rgba(94,143,82,.2); }
 
-  .grid { display: grid; gap: 28px; margin-top: 28px; grid-template-areas: "intro" "scene" "rules"; }
-  .intro { grid-area: intro; } .stage-col { grid-area: scene; } .rules { grid-area: rules; }
-  @media (min-width: 900px) {
-    .grid { grid-template-columns: 1fr 1.05fr; grid-template-areas: "intro scene" "rules scene"; grid-template-rows: auto 1fr;
-            column-gap: 48px; row-gap: 30px; margin-top: 56px; align-items: start; }
+  /* layout */
+  .grid { display: grid; gap: 36px; margin-top: 28px; }
+  @media (min-width: 920px) {
+    .grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); column-gap: 64px; margin-top: 56px; align-items: start; }
+    .stage-col { position: sticky; top: 24px; }
   }
 
-  .tag { display: inline-flex; align-items: center; }
-  .tag b { position: relative; z-index: 3; font-size: 13px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase;
-           color: #fff; background: var(--rust); padding: 9px 18px; border-radius: 999px; }
-  .tag i { width: 36px; height: 36px; border-radius: 50%; background: var(--rust-soft); margin-left: -22px; border: 2px solid var(--paper); }
-  .tag i:nth-of-type(1) { z-index: 2; } .tag i:nth-of-type(2) { z-index: 1; opacity: .7; }
-
-  h1 { margin-top: 22px; font-weight: 600; font-size: clamp(46px, 8vw, 80px); line-height: .98; letter-spacing: -.045em; }
+  .kicker { font-size: 13px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: var(--rust); }
+  h1 { margin-top: 14px; font-weight: 600; font-size: clamp(44px, 6.4vw, 76px); line-height: .98; letter-spacing: -.045em; }
   h1 span { display: block; color: var(--rust); }
-  .lede { margin-top: 20px; max-width: 30em; font-size: 18px; line-height: 1.5; color: var(--ink-soft); }
+  .lede { margin-top: 18px; max-width: 30em; font-size: 18px; line-height: 1.5; color: var(--ink-soft); }
+  .langs { margin-top: 18px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .langs span { font-size: 13px; font-weight: 500; color: var(--ink-soft); background: #fff8f0; border: 1px solid var(--hair); padding: 5px 11px; border-radius: 999px; }
+  .langs span.on { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
-  .langs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 26px; }
-  .langs button { font: 500 15px var(--font); color: var(--ink); background: #fff8f0; border: 1px solid var(--hair);
-                  padding: 9px 16px; border-radius: 999px; cursor: pointer; transition: transform .15s, background .2s, color .2s; }
-  .langs button:hover { transform: translateY(-1px); }
-  .langs button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-  .live .langs { opacity: .4; pointer-events: none; }
+  /* numbered walkthrough */
+  .how-label { margin-top: 34px; font-size: 13px; font-weight: 600; color: var(--ink-faint); letter-spacing: .02em; }
+  .steps { list-style: none; padding: 0; margin-top: 10px; }
+  .steps li { position: relative; border-top: 1px solid var(--hair); }
+  .steps li:last-child { border-bottom: 1px solid var(--hair); }
+  .steps button { width: 100%; display: grid; grid-template-columns: 28px 1fr; gap: 0 10px; text-align: left; background: none; border: 0; cursor: pointer; padding: 14px 0; color: var(--ink-faint); transition: color .2s; }
+  .steps button:hover { color: var(--ink-soft); }
+  .steps .n { font-size: 13px; font-weight: 600; padding-top: 3px; font-variant-numeric: tabular-nums; }
+  .steps .t { font-size: 19px; font-weight: 600; letter-spacing: -.02em; }
+  .steps .d { grid-column: 2; font-size: 15px; line-height: 1.5; color: var(--ink-soft); max-height: 0; opacity: 0; overflow: hidden; transition: max-height .4s ease, opacity .3s ease, margin .3s; }
+  .steps li.on button { color: var(--ink); }
+  .steps li.on .d { max-height: 90px; opacity: 1; margin-top: 6px; }
+  .steps li.on .n { color: var(--rust); }
+  .steps li::after { content: ""; position: absolute; left: 0; bottom: -1px; height: 2px; width: 0; background: var(--rust); transition: width .3s; }
+  .steps li.on::after { width: 100%; }
 
-  .scene { position: relative; border-radius: 32px; overflow: hidden; overflow: clip; aspect-ratio: 1 / 1.02; max-height: 600px; width: 100%;
+  .cta-row { margin-top: 28px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .play { font: 600 16px var(--font); color: var(--paper); background: var(--ink); border: 0; padding: 15px 24px; border-radius: 999px; cursor: pointer; box-shadow: 0 12px 20px -10px rgba(42,26,18,.55); transition: transform .15s; display: inline-flex; align-items: center; gap: 10px; }
+  .play:hover { transform: translateY(-1px); }
+  .play svg { width: 14px; height: 14px; }
+  .fine { font-size: 13px; color: var(--ink-faint); }
+
+  /* scene */
+  .scene { position: relative; border-radius: 32px; overflow: hidden; overflow: clip; aspect-ratio: 1 / .86; width: 100%;
            background: linear-gradient(180deg, var(--sky-1) 0%, var(--sky-2) 70%); isolation: isolate; }
   .scene::after { content: ""; position: absolute; inset: 0; background: var(--grain); opacity: .3; mix-blend-mode: multiply; pointer-events: none; z-index: 6; }
-
-  .sun { position: absolute; width: 18%; aspect-ratio: 1; border-radius: 50%; top: 9%; right: 12%; --c: var(--mustard); animation: float 9s ease-in-out infinite; }
+  .sun { position: absolute; width: 16%; aspect-ratio: 1; border-radius: 50%; top: 10%; right: 12%; --c: var(--mustard); animation: float 9s ease-in-out infinite; }
   .cloud { position: absolute; height: 7%; border-radius: 999px; --c: #FFF6EC; box-shadow: inset -4px -5px 8px rgba(200,150,120,.35), inset 3px 3px 6px #fff, 0 8px 14px -8px rgba(150,80,40,.25); }
-  .cloud.a { width: 26%; top: 18%; left: 10%; animation: drift 22s ease-in-out infinite; }
-  .cloud.b { width: 17%; top: 30%; left: 60%; animation: drift 28s ease-in-out infinite reverse; }
-
+  .cloud.a { width: 24%; top: 18%; left: 10%; animation: drift 22s ease-in-out infinite; }
+  .cloud.b { width: 16%; top: 31%; left: 62%; animation: drift 28s ease-in-out infinite reverse; }
   .hill { position: absolute; border-radius: 50%; }
-  .hill.back { width: 120%; height: 46%; left: -30%; bottom: -18%; --c: var(--ochre); }
-  .hill.front { width: 115%; height: 40%; right: -40%; bottom: -22%; --c: #C9662F; }
-
+  .hill.back { width: 120%; height: 50%; left: -30%; bottom: -22%; --c: var(--ochre); }
+  .hill.front { width: 115%; height: 44%; right: -40%; bottom: -26%; --c: #C9662F; }
   .tree { position: absolute; bottom: 0; display: flex; flex-direction: column; align-items: center; z-index: 2; }
   .tree .top { width: var(--s); height: var(--s); border-radius: 50%; }
   .tree .stem { width: 6px; height: calc(var(--s) * .55); margin-top: -4px; border-radius: 3px; background: #7A4A2E; box-shadow: inset -2px 0 2px rgba(0,0,0,.25); }
-  .tree.t1 { left: 9%;  bottom: 27%; --s: 46px; } .tree.t1 .top { --c: var(--berry); }
-  .tree.t2 { left: 18%; bottom: 23%; --s: 32px; } .tree.t2 .top { --c: var(--mustard); }
-  .tree.t3 { right: 11%; bottom: 20%; --s: 40px; } .tree.t3 .top { --c: #D9772F; }
-
+  .tree.t1 { left: 9%;  bottom: 25%; --s: 44px; } .tree.t1 .top { --c: var(--berry); }
+  .tree.t2 { left: 18%; bottom: 21%; --s: 30px; } .tree.t2 .top { --c: var(--mustard); }
+  .tree.t3 { right: 11%; bottom: 17%; --s: 38px; } .tree.t3 .top { --c: #D9772F; }
   .leaf { position: absolute; top: -30px; width: 16px; height: 16px; border-radius: 0 70% 0 70%; z-index: 3; animation: fall linear infinite; }
 
-  .buddy-wrap { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -54%); display: grid; justify-items: center; z-index: 4; }
+  .buddy-wrap { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -56%); display: grid; justify-items: center; z-index: 4; }
   .buddy-bob { animation: bob 3.2s ease-in-out infinite; }
-  .buddy { width: clamp(130px, 34vw, 172px); aspect-ratio: 1; border-radius: 50%; border: 0; cursor: pointer; --c: #E5742F;
-           transform: scale(calc(1 + var(--level) * .10), calc(1 - var(--level) * .07)); transform-origin: 50% 100%;
-           transition: transform .07s linear; }
+  .buddy { width: clamp(120px, 30vw, 160px); aspect-ratio: 1; border-radius: 50%; border: 0; cursor: pointer; --c: #E5742F;
+           transform: scale(calc(1 + var(--level) * .10), calc(1 - var(--level) * .07)); transform-origin: 50% 100%; transition: transform .07s linear; }
   .buddy:focus-visible { outline: 3px solid rgba(194,80,31,.45); outline-offset: 8px; }
   .face { position: absolute; inset: 0; display: grid; place-items: center; pointer-events: none; z-index: 1; }
   .eyes { display: flex; gap: 26%; width: 100%; justify-content: center; margin-top: -12%; }
-  .eye { width: 11%; aspect-ratio: .78; border-radius: 50%; background: #2A1A12; position: relative; animation: blink 5.5s infinite; }
+  .eye { width: 11%; aspect-ratio: .78; border-radius: 50%; background: #2A1A12; position: relative; animation: blink 5.5s infinite; transition: transform .25s; }
   .eye::after { content: ""; position: absolute; width: 32%; height: 28%; border-radius: 50%; background: #fff; top: 18%; left: 22%; }
+  .thinking .eye { transform: translate(18%, -22%); }
   .cheeks { position: absolute; width: 74%; display: flex; justify-content: space-between; top: 54%; }
-  .cheeks i { width: 16%; height: 9px; border-radius: 50%; background: rgba(214, 70, 60, .45); filter: blur(1.5px); }
-  .mouth { position: absolute; top: 60%; width: 18%; height: calc(5px + var(--level) * 26px); border-radius: 0 0 40px 40px;
-           background: #5A1E14; transition: height .07s linear; box-shadow: inset 0 3px 0 rgba(0,0,0,.25); }
+  .cheeks i { width: 16%; height: 9px; border-radius: 50%; background: rgba(214, 70, 60, .45); filter: blur(1.5px); transition: background .3s; }
+  .proud .cheeks i { background: rgba(214, 70, 60, .75); }
+  .mouth { position: absolute; top: 60%; width: 18%; height: calc(5px + var(--level) * 26px); border-radius: 0 0 40px 40px; background: #5A1E14; transition: height .07s linear; box-shadow: inset 0 3px 0 rgba(0,0,0,.25); }
   .shadow { width: 62%; height: 14px; border-radius: 50%; background: rgba(110, 50, 20, .28); filter: blur(3px); margin-top: 10px; animation: shadow 3.2s ease-in-out infinite; }
 
-  .call-chip { position: absolute; left: 50%; bottom: 7%; transform: translateX(-50%); z-index: 5; display: flex; align-items: center; gap: 12px; }
-  .start { font: 600 16px var(--font); color: var(--paper); background: var(--ink); border: 0; padding: 14px 22px; border-radius: 999px; cursor: pointer;
-           box-shadow: 0 12px 20px -10px rgba(42,26,18,.55); transition: transform .15s; white-space: nowrap; }
-  .start:hover { transform: translateY(-1px); }
-  .round { width: 52px; height: 52px; border-radius: 50%; border: 0; cursor: pointer; display: grid; place-items: center; transition: transform .15s; }
-  .round:active, .start:active { transform: scale(.95); }
-  .round.end { --c: var(--berry); color: #fff; }
+  /* speech cue above buddy */
+  .cue { position: absolute; left: 50%; top: 8%; transform: translateX(-50%) translateY(6px); z-index: 5; opacity: 0; transition: opacity .3s, transform .3s;
+         font-size: 13px; font-weight: 600; color: var(--ink); background: #FFF9F2; border: 1px solid var(--hair); padding: 7px 12px; border-radius: 999px; white-space: nowrap; box-shadow: 0 8px 18px -12px rgba(90,40,15,.4); }
+  .cue.show { opacity: 1; transform: translateX(-50%); }
+  .cue b { color: var(--rust); }
+
+  .call-chip { position: absolute; left: 50%; bottom: 6%; transform: translateX(-50%); z-index: 5; display: flex; align-items: center; gap: 12px; }
+  .round { width: 48px; height: 48px; border-radius: 50%; border: 0; cursor: pointer; display: grid; place-items: center; --c: var(--berry); color: #fff; transition: transform .15s; }
+  .round:active { transform: scale(.95); }
   .round svg { position: relative; z-index: 2; }
-  .live .start, .call-chip .round { display: none; }
-  .live .call-chip .round { display: grid; }
+  .call-chip { display: none; }
+  .live .call-chip { display: flex; }
 
   .status { margin-top: 14px; text-align: center; font-size: 15px; color: var(--ink-soft); min-height: 22px; }
 
+  /* transcript */
   .transcript { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
-  .turn { max-width: 86%; padding: 13px 17px; border-radius: 22px; font-size: 17px; line-height: 1.45; animation: rise .45s cubic-bezier(.2,.9,.25,1.2); }
-  .turn.tutor { align-self: flex-start; background: #FFF9F2; border: 1px solid var(--hair); border-bottom-left-radius: 8px; box-shadow: 0 8px 18px -12px rgba(90,40,15,.35); }
+  .turn { max-width: 86%; padding: 12px 16px; border-radius: 20px; font-size: 17px; line-height: 1.45; animation: rise .45s cubic-bezier(.2,.9,.25,1.2); }
+  .turn.tutor { align-self: flex-start; background: var(--card); border: 1px solid var(--hair); border-bottom-left-radius: 8px; box-shadow: 0 8px 18px -12px rgba(90,40,15,.35); }
   .turn.you { align-self: flex-end; background: var(--rust-soft); color: #5B2A14; border-bottom-right-radius: 8px; }
   .turn em { font-style: normal; font-weight: 700; color: var(--rust); background: linear-gradient(transparent 60%, rgba(224,160,74,.35) 60%); }
+  .turn .slip { text-decoration: underline wavy rgba(180,55,46,.55); text-underline-offset: 4px; text-decoration-thickness: 1.5px; }
+  .note { align-self: flex-end; display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-soft); margin-top: -4px; animation: rise .45s ease; }
+  .note.left { align-self: flex-start; }
+  .note .tag { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 3px 8px; border-radius: 999px; }
+  .note .tag.fix { background: #F8DCD6; color: var(--berry); }
+  .note .tag.hint { background: #FBEBC4; color: #8A5A0E; }
+  .note .tag.stay { background: #E3EBDC; color: #3F6B36; }
+  .note s { color: var(--ink-faint); }
+  .note b { color: var(--ink); font-weight: 600; }
 
-  .rules { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-  .rule { background: #FFF8F0; border: 1px solid var(--hair); border-radius: 20px; padding: 14px 16px; font-size: 14px; line-height: 1.4; color: var(--ink-soft); }
-  .rule strong { display: block; color: var(--ink); font-weight: 600; font-size: 15px; margin-bottom: 3px; }
-
-  .demo-note { margin-top: 10px; font-size: 13px; color: var(--ink-soft); opacity: .8; }
+  /* recap */
+  .recap { margin-top: 18px; background: var(--card); border: 1px solid var(--hair); border-radius: 24px; padding: 22px; box-shadow: 0 18px 30px -22px rgba(90,40,15,.45); animation: rise .5s cubic-bezier(.2,.9,.25,1.2); }
+  .recap-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+  .recap h2 { font-size: 22px; font-weight: 700; letter-spacing: -.03em; }
+  .recap .meta { font-size: 13px; color: var(--ink-faint); }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+  .stats div { background: #fff; border: 1px solid var(--hair); border-radius: 14px; padding: 10px 12px; }
+  .stats b { display: block; font-size: 24px; font-weight: 700; letter-spacing: -.03em; line-height: 1; }
+  .stats span { font-size: 12px; color: var(--ink-soft); }
+  .recap h3 { margin-top: 16px; font-size: 12px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--ink-faint); }
+  .recap ul { list-style: none; padding: 0; margin-top: 8px; display: grid; gap: 6px; }
+  .recap li { font-size: 15px; line-height: 1.45; }
+  .recap li s { color: var(--ink-faint); }
+  .recap li .why { color: var(--ink-soft); font-size: 14px; }
+  .word { display: inline-block; font-weight: 600; background: linear-gradient(transparent 60%, rgba(224,160,74,.35) 60%); }
+  .next { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--hair); font-size: 15px; color: var(--ink-soft); }
+  .next b { color: var(--ink); }
+  .recap-actions { margin-top: 16px; display: flex; gap: 10px; flex-wrap: wrap; }
+  .ghost { font: 600 14px var(--font); background: transparent; border: 1px solid var(--hair); color: var(--ink); padding: 10px 16px; border-radius: 999px; cursor: pointer; }
+  .ghost:hover { border-color: var(--ink-soft); }
 
   @keyframes bob { 50% { transform: translateY(-10px); } }
   @keyframes shadow { 50% { transform: scaleX(.82); opacity: .7; } }
@@ -151,10 +193,15 @@
   @keyframes rise { from { opacity: 0; transform: translateY(8px) scale(.98); } }
   @keyframes fall {
     0% { transform: translate(0, -30px) rotate(0); }
-    50% { transform: translate(30px, 300px) rotate(180deg); }
-    100% { transform: translate(-10px, 640px) rotate(340deg); }
+    50% { transform: translate(30px, 280px) rotate(180deg); }
+    100% { transform: translate(-10px, 600px) rotate(340deg); }
   }
-  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+  @media (max-width: 520px) {
+    .back-link { font-size: 13px; }
+    .turn { font-size: 16px; max-width: 92%; }
+    .stats b { font-size: 20px; }
+  }
 </style>
 </head>
 <body>
@@ -163,23 +210,33 @@
     <div class="brand"><span class="clay"></span>amber</div>
     <div class="head-right">
       <a class="back-link" href="./">&larr; Portfolio</a>
-      <div class="status-pill"><span class="dot"></span><span id="pill">Demo</span></div>
+      <div class="status-pill"><span class="dot"></span><span id="pill">Sample</span></div>
     </div>
   </header>
 
   <div class="grid">
     <section class="intro">
-      <div class="tag"><b id="tagName">Español</b><i></i><i></i></div>
-      <h1><span id="greeting" style="color:inherit">Hablemos.</span><span id="tagline">Solo en español.</span></h1>
-      <p class="lede">A voice tutor that keeps you speaking. Mistakes get fixed gently mid-conversation, and English only shows up as a tiny hint when you're really stuck.</p>
-      <p class="demo-note">This is a recorded sample conversation. The live version talks with you in real time using your microphone.</p>
-    </section>
+      <div class="kicker">Voice language tutor</div>
+      <h1>Hablemos.<span>Solo en español.</span></h1>
+      <p class="lede">Amber keeps you talking. It stays in the language you’re learning, fixes one thing at a time inside its reply, and only reaches for English when you’re truly stuck.</p>
+      <div class="langs" aria-label="Languages">
+        <span class="on">Español</span><span>Français</span><span>Italiano</span><span>Deutsch</span><span>Português</span><span>Norsk</span><span>日本語</span>
+      </div>
 
-    <div class="rules">
-      <div class="rule"><strong>Always in language</strong>Asking for English gets a kind &ldquo;no.&rdquo;</div>
-      <div class="rule"><strong>One fix per turn</strong>Woven into the reply, never a lecture.</div>
-      <div class="rule"><strong>5 tries, then a hint</strong>A few English words, then straight back.</div>
-    </div>
+      <div class="how-label">How a session goes</div>
+      <ol class="steps" id="steps">
+        <li data-i="0"><button onclick="playFrom(0)"><span class="n">01</span><span class="t">Just start talking</span><span class="d">No buttons to hold. Amber greets you and asks one easy question.</span></button></li>
+        <li data-i="1"><button onclick="playFrom(1)"><span class="n">02</span><span class="t">One gentle fix per turn</span><span class="d">Mistakes get corrected inside the reply, so the conversation never stops for a grammar lesson.</span></button></li>
+        <li data-i="2"><button onclick="playFrom(2)"><span class="n">03</span><span class="t">No English escape hatch</span><span class="d">Ask for English and you get a kind “no” and an easier question instead.</span></button></li>
+        <li data-i="3"><button onclick="playFrom(3)"><span class="n">04</span><span class="t">A tiny hint when you’re stuck</span><span class="d">One word of English, then straight back to Spanish.</span></button></li>
+        <li data-i="4"><button onclick="playFrom(4)"><span class="n">05</span><span class="t">Leave with a recap</span><span class="d">What you fixed, the words you picked up, and what to try next time.</span></button></li>
+      </ol>
+
+      <div class="cta-row">
+        <button class="play" id="playBtn" onclick="playFrom(0)"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 1.5v11l9-5.5z" fill="currentColor"/></svg>Play a sample session</button>
+        <span class="fine">About 30 seconds · Sound off</span>
+      </div>
+    </section>
 
     <section class="stage-col">
       <div class="scene" id="scene">
@@ -190,10 +247,10 @@
         <div class="tree t2"><div class="top clay"></div><div class="stem"></div></div>
         <div class="hill front clay"></div>
         <div class="tree t3"><div class="top clay"></div><div class="stem"></div></div>
-
+        <div class="cue" id="cue"></div>
         <div class="buddy-wrap">
           <div class="buddy-bob">
-            <button class="buddy clay" id="orb" aria-label="Play sample conversation">
+            <button class="buddy clay" id="orb" aria-label="Play sample session" onclick="playFrom(0)">
               <span class="face">
                 <span class="eyes"><span class="eye"></span><span class="eye"></span></span>
                 <span class="cheeks"><i></i><i></i></span>
@@ -203,24 +260,23 @@
           </div>
           <div class="shadow"></div>
         </div>
-
         <div class="call-chip">
-          <button class="start" id="startBtn">Play a sample</button>
-          <button class="round end clay" id="end" aria-label="Stop sample">
+          <button class="round end clay" id="end" aria-label="Stop sample" onclick="stop('Stopped. Pick a step or play again.')">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
           </button>
         </div>
       </div>
 
-      <div class="status" id="status">Tap the little guy to hear a sample conversation in Spanish.</div>
+      <div class="status" id="status">Tap the little guy, or pick a step, to hear how a session goes.</div>
       <div class="transcript" id="transcript" aria-live="polite"></div>
+      <div id="recapSlot"></div>
     </section>
   </div>
 </main>
 
 <script>
-const $ = (id) => document.getElementById(id);
-const app = $("app"), statusEl = $("status"), pill = $("pill"), transcript = $("transcript");
+const $ = id => document.getElementById(id);
+const app = $("app"), statusEl = $("status"), transcript = $("transcript"), cue = $("cue"), recapSlot = $("recapSlot");
 
 (function leaves() {
   const colors = ["#C2501F", "#E0A04A", "#B4372E", "#E7B648"];
@@ -235,64 +291,129 @@ const app = $("app"), statusEl = $("status"), pill = $("pill"), transcript = $("
   }
 })();
 
-function esc(s) { return s.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c])); }
-function fmt(s) { return esc(s).replace(/\*([^*]+)\*/g, "<em>$1</em>"); }
-function bubble(who, text) {
-  const el = document.createElement("div");
-  el.className = `turn ${who}`;
-  el.innerHTML = fmt(text);
-  transcript.appendChild(el);
-  el.scrollIntoView({ block: "nearest", behavior: "smooth" });
-}
+const esc = s => s.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+const fmt = s => esc(s).replace(/\*([^*]+)\*/g, "<em>$1</em>").replace(/_([^_]+)_/g, '<span class="slip">$1</span>');
 
-let run = 0;
-function setLive(on, msg) {
+// Each beat belongs to a step. who: t = tutor, y = you, n = note (html), c = cue above the buddy
+const SCRIPT = [
+  { step: 0, who: "c", html: "Listening…" },
+  { step: 0, who: "t", text: "¡Hola! Qué bueno escucharte. ¿Qué tal tu día?" },
+  { step: 1, who: "y", text: "Hola. Estoy cansado porque tengo _un reunión_ hoy." },
+  { step: 1, who: "t", text: "Ah, tienes *una* reunión hoy. ¿Sobre qué es?" },
+  { step: 1, who: "n", side: "left", html: '<span class="tag fix">Fix</span><s>un</s> → <b>una</b> reunión' },
+  { step: 2, who: "y", text: "Can you speak English?" },
+  { step: 2, who: "t", text: "Lo siento, aquí solo español. ¡Tú puedes! ¿Es una reunión de trabajo?" },
+  { step: 2, who: "n", side: "left", html: '<span class="tag stay">Stayed in Spanish</span>Rephrased to a yes-or-no question' },
+  { step: 3, who: "y", text: "Umm… no entiendo “trabajo”." },
+  { step: 3, who: "t", text: "Pista: *trabajo* = work. 🙂 Entonces… ¿tu reunión es de trabajo?" },
+  { step: 3, who: "n", side: "left", html: '<span class="tag hint">Hint</span>One word of English, then back' },
+  { step: 3, who: "y", text: "¡Sí! Es de trabajo." },
+  { step: 3, who: "t", text: "¡Muy bien! ¿Y con quién es la reunión?" },
+  { step: 4, who: "recap" },
+];
+const STEP_START = [0, 2, 5, 8, 13];
+
+let run = 0, speaking = false, t = 0;
+
+function setStep(i) {
+  document.querySelectorAll("#steps li").forEach(li => li.classList.toggle("on", +li.dataset.i === i));
+}
+function setLive(on) {
   app.classList.toggle("live", on);
-  pill.textContent = on ? "Playing" : "Demo";
+  $("pill").textContent = on ? "Playing" : "Sample";
+}
+function stop(msg) {
+  run++;
+  speaking = false;
+  setLive(false);
+  app.classList.remove("thinking", "proud");
+  cue.classList.remove("show");
+  document.documentElement.style.setProperty("--level", 0);
   if (msg) statusEl.textContent = msg;
 }
 
-const lines = [
-  ["t", "¡Hola! Qué bueno escucharte. ¿Qué tal tu día?"],
-  ["y", "Hola. Yo estoy cansado porque tengo un reunión hoy."],
-  ["t", "Ah, tienes *una* reunión hoy. ¿Sobre qué es?"],
-  ["y", "Can you speak English?"],
-  ["t", "Lo siento, aquí solo español. ¡Tú puedes! ¿Es una reunión de trabajo?"],
-  ["y", "Umm… no entiendo “trabajo”."],
-  ["t", "Pista: *trabajo* = work. 🙂 Entonces… ¿tu reunión es de trabajo? ¿Sí o no?"],
-  ["y", "¡Sí! Es de trabajo."],
-  ["t", "¡Muy bien! ¿Y con quién es la reunión?"],
-];
-
-function play() {
-  if (app.classList.contains("live")) return;
+// Render everything before `from` instantly, then animate from there.
+function playFrom(from) {
+  stop();
   const me = ++run;
   transcript.innerHTML = "";
-  setLive(true, "Listening…");
-  let i = 0, t = 0, speaking = false;
+  recapSlot.innerHTML = "";
+  const start = STEP_START[from];
+  for (let k = 0; k < start; k++) render(SCRIPT[k], true);
+  setLive(true);
+  setStep(from);
+  pulse(me);
+  // On narrow screens the scene sits below the steps; bring it into view.
+  if (innerWidth < 920) $("scene").scrollIntoView({ behavior: "instant", block: "start" });
+  let k = start;
   (function next() {
-    if (me !== run || i >= lines.length) {
-      if (me === run) setTimeout(() => me === run && setLive(false, "That's the sample. Tap to replay."), 1500);
-      return;
-    }
-    const [who, text] = lines[i++];
-    speaking = who === "t";
-    bubble(speaking ? "tutor" : "you", text);
-    statusEl.textContent = speaking ? "Speaking…" : "Listening…";
-    setTimeout(next, 1900);
-  })();
-  (function pulse() {
-    if (me !== run || !app.classList.contains("live")) return document.documentElement.style.setProperty("--level", 0);
-    t += .22;
-    const v = speaking ? Math.max(0, .35 + .35 * Math.sin(t) * Math.sin(t * 1.7)) : .04;
-    document.documentElement.style.setProperty("--level", v.toFixed(3));
-    requestAnimationFrame(pulse);
+    if (me !== run) return;
+    if (k >= SCRIPT.length) { setLive(false); statusEl.textContent = "That’s the sample. Pick any step to replay it."; return; }
+    const beat = SCRIPT[k++];
+    setStep(beat.step);
+    const wait = render(beat, false);
+    setTimeout(next, wait);
   })();
 }
 
-$("orb").onclick = play;
-$("startBtn").onclick = play;
-$("end").onclick = () => { run++; document.documentElement.style.setProperty("--level", 0); setLive(false, "Stopped. Tap the little guy to replay."); };
+function render(b, instant) {
+  if (b.who === "c") {
+    if (!instant) { cue.innerHTML = b.html; cue.classList.add("show"); statusEl.textContent = "Listening…"; }
+    return 900;
+  }
+  if (b.who === "recap") {
+    cue.classList.remove("show");
+    speaking = false;
+    app.classList.add("proud");
+    statusEl.textContent = "Session complete.";
+    recapSlot.innerHTML = recapHtml();
+    if (!instant) recapSlot.firstElementChild.scrollIntoView({ block: "nearest", behavior: "smooth" });
+    return 400;
+  }
+  const el = document.createElement("div");
+  if (b.who === "n") {
+    el.className = "note " + (b.side || "");
+    el.innerHTML = b.html;
+  } else {
+    el.className = "turn " + (b.who === "t" ? "tutor" : "you");
+    el.innerHTML = fmt(b.text);
+  }
+  transcript.appendChild(el);
+  if (instant) return 0;
+  el.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  cue.classList.remove("show");
+  app.classList.remove("proud");
+  if (b.who === "t") { speaking = true; app.classList.remove("thinking"); statusEl.textContent = "Speaking…"; return 2300; }
+  if (b.who === "y") { speaking = false; app.classList.add("thinking"); statusEl.textContent = "Listening…"; return 1900; }
+  return 1100;
+}
+
+function pulse(me) {
+  if (me !== run) return;
+  t += .22;
+  const v = speaking ? Math.max(0, .35 + .35 * Math.sin(t) * Math.sin(t * 1.7)) : (app.classList.contains("live") ? .04 : 0);
+  document.documentElement.style.setProperty("--level", v.toFixed(3));
+  requestAnimationFrame(() => pulse(me));
+}
+
+function recapHtml() {
+  return `<section class="recap" aria-label="Session recap">
+    <div class="recap-head"><h2>Today’s session</h2><span class="meta">Spanish · sample</span></div>
+    <div class="stats">
+      <div><b>${SCRIPT.filter(b => b.who === "y").length}</b><span>things you said</span></div>
+      <div><b>1</b><span>fix</span></div>
+      <div><b>1</b><span>hint</span></div>
+    </div>
+    <h3>Fixes</h3>
+    <ul><li><s>un</s> → <b>una</b> reunión <span class="why">· reunión is feminine</span></li></ul>
+    <h3>New words</h3>
+    <ul><li><span class="word">trabajo</span> <span class="why">· work</span></li><li><span class="word">reunión</span> <span class="why">· meeting</span></li></ul>
+    <p class="next"><b>Next time:</b> answer Amber’s last question: “¿Con quién es la reunión?”</p>
+    <div class="recap-actions"><button class="ghost" onclick="playFrom(0)">Replay from the start</button></div>
+  </section>`;
+}
+
+setStep(0);
 </script>
 </body>
 </html>
